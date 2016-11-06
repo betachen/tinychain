@@ -1,3 +1,5 @@
+build/*
+touch.sh
 # Compiled Object files
 *.slo
 *.lo
