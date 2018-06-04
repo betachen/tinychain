@@ -23,7 +23,7 @@ STRING(TOUPPER "${CMAKE_BUILD_TYPE}" CMAKE_BUILD_TYPE)
 # ----------------- common Definitions ------
 SET(COMMON_WARN "-Wall -Werror -Wextra -Wstrict-aliasing=2 -Wno-unused-parameter -Wno-unused-variable -Wno-type-limits")
 SET(COMMON_FLAGS "-fstrict-aliasing -fvisibility=hidden")
-SET(COMMON_LIBS "-pthread")
+#SET(COMMON_LIBS "-pthread") chenhao
 SET(COMMON_ARGS "${COMMON_FLAGS} ${COMMON_WARN} ${COMMON_LIBS}")
 
 # --------------- Compiler ------------------
@@ -38,7 +38,7 @@ ENDIF()
 SET(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -fPIC")
 
 # --------------- Definitions ------------------
-ADD_DEFINITIONS(-DBOOST_NO_AUTO_PTR=1 -DBOOST_NO_RTTI=1 -DBOOST_NO_TYPEID=1)
+ADD_DEFINITIONS(-DBOOST_NO_AUTO_PTR=1 -DBOOST_NO_TYPEID=1)
 
 IF(CMAKE_BUILD_TYPE STREQUAL "DEBUG")
   ADD_DEFINITIONS(-DMVS_DEBUG=1)
@@ -56,10 +56,9 @@ SET(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH}" "${PROJECT_SOURCE_DIR}/etc")
 SET(CMAKE_INSTALL_PREFIX "/usr/local/mvs")
 
 set(Boost_USE_STATIC_LIBS   ON)
-#FIND_PACKAGE(Boost 1.56 REQUIRED COMPONENTS date_time filesystem system program_options)
-FIND_PACKAGE(Boost 1.56 REQUIRED COMPONENTS date_time filesystem system
-program_options regex thread)
-FIND_PACKAGE(secp256k1 REQUIRED)
+FIND_PACKAGE(Boost 1.56 REQUIRED COMPONENTS date_time filesystem system program_options)
+#FIND_PACKAGE(Boost 1.56 REQUIRED COMPONENTS date_time filesystem system program_options regex thread)
+#FIND_PACKAGE(secp256k1 REQUIRED)
 
 # ------------------ includes --------------------
 INCLUDE_DIRECTORIES("${Boost_INCLUDE_DIRS}")
@@ -68,7 +67,6 @@ INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/include")
 
 IF(ENABLE_SHARED_LIBS)
   SET(mongoose_LIBRARY mongoose_shared)
-  SET(tinychain_LIBRARY tinychain_shared)
   SET(network_LIBRARY network_shared)
   SET(consensus_LIBRARY consensus_shared)
   SET(database_LIBRARY database_shared)
@@ -76,7 +74,6 @@ IF(ENABLE_SHARED_LIBS)
   SET(protocol_LIBRARY protocol_shared)
 ELSE()
   SET(mongoose_LIBRARY mongoose_static)
-  SET(tinychain_LIBRARY tinychain_static)
   SET(network_LIBRARY network_static)
   SET(consensus_LIBRARY consensus_static)
   SET(database_LIBRARY database_static)
@@ -87,8 +84,5 @@ ENDIF()
 
 ENABLE_TESTING()
 
-ADD_SUBDIRECTORY(etc)
 ADD_SUBDIRECTORY(contrib)
 ADD_SUBDIRECTORY(src)
-#ADD_SUBDIRECTORY(include)
-#ADD_SUBDIRECTORY(test)

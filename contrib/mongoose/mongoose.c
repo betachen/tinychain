@@ -49,7 +49,7 @@
  * 0 - select()
  * 1 - epoll() (Linux only)
  */
-#define MG_MGR_EV_MGR 1 /* select() */
+#define MG_MGR_EV_MGR 0 /* select() */
 #endif
 
 #ifdef PICOTCP

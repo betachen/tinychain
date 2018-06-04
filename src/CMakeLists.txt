@@ -1,4 +1,4 @@
-ADD_SUBDIRECTORY(lib/tinychain)
+ADD_SUBDIRECTORY(lib/chainbase)
 ADD_SUBDIRECTORY(lib/network)
 ADD_SUBDIRECTORY(lib/consensus)
 ADD_SUBDIRECTORY(lib/database)

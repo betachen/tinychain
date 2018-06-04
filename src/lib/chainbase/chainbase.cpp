@@ -1,11 +1,11 @@
 #include <tinychain/tinychain.hpp>
-#include <tinychain/tinychain/tinychain.hpp>
+#include <tinychain/chainbase/chainbase.hpp>
 
 namespace tinychain
 {
 
 
-void tinychain::test(){}
+void chainbase::test(){}
 
 
 } //tinychain
