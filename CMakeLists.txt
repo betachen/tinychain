@@ -21,7 +21,7 @@ ENDIF()
 STRING(TOUPPER "${CMAKE_BUILD_TYPE}" CMAKE_BUILD_TYPE)
 
 # ----------------- common Definitions ------
-SET(COMMON_WARN "-Wall -Werror -Wextra -Wstrict-aliasing=2 -Wno-unused-parameter -Wno-unused-variable -Wno-type-limits")
+SET(COMMON_WARN "-Wall -Werror -Wstrict-aliasing=2 -Wno-unused-parameter -Wno-unused-variable -Wno-type-limits -Wno-deprecated-register")
 SET(COMMON_FLAGS "-fstrict-aliasing -fvisibility=hidden")
 #SET(COMMON_LIBS "-pthread") chenhao
 SET(COMMON_ARGS "${COMMON_FLAGS} ${COMMON_WARN} ${COMMON_LIBS}")
@@ -62,7 +62,7 @@ FIND_PACKAGE(Boost 1.56 REQUIRED COMPONENTS date_time filesystem system program_
 
 # ------------------ includes --------------------
 INCLUDE_DIRECTORIES("${Boost_INCLUDE_DIRS}")
-INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/contrib")
+INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/include/tinychain/chainbase/contrib")
 INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/include")
 
 IF(ENABLE_SHARED_LIBS)
