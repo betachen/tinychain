@@ -30,10 +30,10 @@ SET(COMMON_ARGS "${COMMON_FLAGS} ${COMMON_WARN} ${COMMON_LIBS}")
 IF("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
   SET(CMAKE_C_FLAGS "-std=c11 ${COMMON_ARGS}")
   #libtinychain has too many ignored-qualifiers, and TODOs
-  SET(CMAKE_CXX_FLAGS "-std=c++11 ${COMMON_ARGS} -fno-enforce-eh-specs -fnothrow-opt -Wno-reorder -Wno-ignored-qualifiers -Wno-unused-function")
+  SET(CMAKE_CXX_FLAGS "-std=c++14 ${COMMON_ARGS} -fno-enforce-eh-specs -fnothrow-opt -Wno-reorder -Wno-ignored-qualifiers -Wno-unused-function")
 ELSEIF("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
   SET(CMAKE_C_FLAGS "-std=c11 ${COMMON_ARGS}")
-  SET(CMAKE_CXX_FLAGS "-std=c++11 ${COMMON_ARGS} -Wno-reorder")
+  SET(CMAKE_CXX_FLAGS "-std=c++14 ${COMMON_ARGS} -Wno-reorder")
 ENDIF()
 SET(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -fPIC")
 
@@ -62,24 +62,13 @@ FIND_PACKAGE(Boost 1.56 REQUIRED COMPONENTS date_time filesystem system program_
 
 # ------------------ includes --------------------
 INCLUDE_DIRECTORIES("${Boost_INCLUDE_DIRS}")
-INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/include/tinychain/chainbase/contrib")
+INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/contrib")
 INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/include")
 
 IF(ENABLE_SHARED_LIBS)
   SET(mongoose_LIBRARY mongoose_shared)
-  SET(network_LIBRARY network_shared)
-  SET(consensus_LIBRARY consensus_shared)
-  SET(database_LIBRARY database_shared)
-  SET(node_LIBRARY node_shared)
-  SET(protocol_LIBRARY protocol_shared)
 ELSE()
   SET(mongoose_LIBRARY mongoose_static)
-  SET(network_LIBRARY network_static)
-  SET(consensus_LIBRARY consensus_static)
-  SET(database_LIBRARY database_static)
-  SET(blockchain_LIBRARY blockchain_static)
-  SET(node_LIBRARY node_static)
-  SET(protocol_LIBRARY protocol_static)
 ENDIF()
 
 ENABLE_TESTING()

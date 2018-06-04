@@ -1,4 +1,6 @@
-FILE(GLOB mongoose_SOURCES "*.c")
+FILE(GLOB_RECURSE mongoose_SOURCES "*.c")
+#aux_source_directory(${CMAKE_CURRENT_LIST_DIR})
+#SET(mongoose_SOURCES ${CMAKE_CURRENT_LIST_DIR})
 
 # Mongoose does not compile with strict aliasing.
 SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fno-strict-aliasing")
@@ -7,7 +9,7 @@ ADD_DEFINITIONS(-DMG_ENABLE_DEBUG)
 ELSE()
   ADD_DEFINITIONS(-DMG_DISABLE_STDIO)
 ENDIF()
-
+                                                                                
 ADD_LIBRARY(mongoose_static STATIC ${mongoose_SOURCES})
 SET_TARGET_PROPERTIES(mongoose_static PROPERTIES OUTPUT_NAME mongoose)
 TARGET_LINK_LIBRARIES(mongoose_static)

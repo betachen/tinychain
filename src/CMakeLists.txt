@@ -1,8 +1,13 @@
-ADD_SUBDIRECTORY(lib/chainbase)
-ADD_SUBDIRECTORY(lib/network)
-ADD_SUBDIRECTORY(lib/consensus)
-ADD_SUBDIRECTORY(lib/database)
-ADD_SUBDIRECTORY(lib/blockchain)
-ADD_SUBDIRECTORY(lib/node)
-ADD_SUBDIRECTORY(lib/protocol)
-ADD_SUBDIRECTORY(main)
+FILE(GLOB_RECURSE tinychain_SOURCES "*.cpp")
+
+ADD_EXECUTABLE(tinychain ${tinychain_SOURCES})
+
+IF(ENABLE_SHARED_LIBS)
+    TARGET_LINK_LIBRARIES(tinychain ${Boost_LIBRARIES} ${mongoose_LIBRARY})
+ELSE()
+    TARGET_LINK_LIBRARIES(tinychain ${Boost_LIBRARIES} ${mongoose_LIBRARY})
+ENDIF()
+
+INSTALL(TARGETS tinychain DESTINATION bin)
+
+#ADD_SUBDIRECTORY(lib)
