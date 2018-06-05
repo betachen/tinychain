@@ -1,4 +1,4 @@
-
+#include <list>
 #include <metaverse/mgbubble/Mongoose.hpp>
 #include <metaverse/mgbubble/utility/Stream_buf.hpp>
 #include <metaverse/mgbubble/utility/Tokeniser.hpp>
