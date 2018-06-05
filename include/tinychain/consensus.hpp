@@ -1,8 +1,7 @@
+#pragma once
 #include <tinychain/tinychain.hpp>
 
 namespace tinychain
-{
-namespace consensus
 {
 
 class consensus
@@ -20,5 +19,4 @@ public:
 private:
 };
 
-}// consensus
 }// tinychain

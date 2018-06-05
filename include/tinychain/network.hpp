@@ -1,8 +1,7 @@
+#pragma once
 #include <tinychain/tinychain.hpp>
 
 namespace tinychain
-{
-namespace network
 {
 
 class network
@@ -20,5 +19,4 @@ public:
 private:
 };
 
-}// network
 }// tinychain

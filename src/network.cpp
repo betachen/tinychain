@@ -4,12 +4,9 @@
 namespace tinychain
 {
 
-namespace network
-{
 
 void network::test(){}
 
-} //network
 
 } //tinychain
 

@@ -4,12 +4,9 @@
 namespace tinychain
 {
 
-namespace database
-{
 
 void database::test(){}
 
-} //database
 
 } //tinychain
 

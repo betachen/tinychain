@@ -4,12 +4,8 @@
 namespace tinychain
 {
 
-namespace blockchain
-{
-
 void blockchain::test(){}
 
-} //blockchain
 
 } //tinychain
 

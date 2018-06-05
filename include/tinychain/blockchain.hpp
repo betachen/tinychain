@@ -1,16 +1,19 @@
+#pragma once
 #include <tinychain/tinychain.hpp>
+#include <tinychain/database.hpp>
+#include <queue>
 
 namespace tinychain
-{
-namespace blockchain
 {
 
 class blockchain
 {
 public:
-    typedef std::vector<block> chain_t;
+    typedef std::vector<block> memory_pool_t;
 
-    blockchain() noexcept = default;
+    blockchain(uint16_t id = 3721):id_(id) {
+        id_ = id;
+    }
     blockchain(const blockchain&) noexcept = default;
     blockchain(blockchain&&) noexcept = default;
     blockchain& operator=(blockchain&&) noexcept = default;
@@ -19,16 +22,13 @@ public:
     void print(){ std::cout<<"class blockchain"<<std::endl; }
     void test();
 
-    struct chain_id {
-        uint64_t id{0};
-        hash256_t genesis_hash;
-    };
+    auto id() {return id_;}
 
 private:
-    chain_id id_;
-    chain_t chain_;
-    //TODO storage
+    uint16_t id_;
+    sha256_t genesis_hash_{"0F78FCC486F5315418FBF095E71C0675EE07D318E5AC4D150050CD8E57966496"};
+    chain_database chain_; 
+    memory_pool_t pool_;
 };
 
-}// blockchain
 }// tinychain

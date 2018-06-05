@@ -4,22 +4,33 @@
 #include <tinychain/sha256.hpp>
 #include <string>
 #include <array>
+#include <random>
 
 namespace tinychain
 {
 
 namespace tc = tinychain;
 
-typedef std::string hash256_t;
+typedef std::string sha256_t;
 
 class key_pair
 {
-
 public:
-    typedef std::vector<std::string> output_t;
+    static uint64_t pseudo_random()
+    {
+        std::random_device device;
+        std::uniform_int_distribution<uint64_t> distribution;
+        return distribution(device);
+    }
 
-    key_pair() noexcept = default;
-    key_pair(const key_pair&) noexcept = default;
+    key_pair() noexcept { 
+        private_key_ = pseudo_random(); 
+        public_key_ = sha256(std::to_string(private_key_));
+    }
+    key_pair(const key_pair& rk) noexcept {
+        private_key_ = rk.private_key(); 
+        public_key_ = rk.public_key();
+    }
     key_pair(key_pair&&) noexcept = default;
     key_pair& operator=(key_pair&&) noexcept = default;
     key_pair& operator=(const key_pair&) noexcept = default;
@@ -27,10 +38,13 @@ public:
     void print(){ std::cout<<"class key_pair"<<std::endl; }
     void test();
 
+    sha256_t public_key() const { return public_key_; }
+    uint64_t private_key() const { return private_key_; }
+
 private:
-    private_key_;
-    public_key_;
-}
+    uint64_t private_key_;
+    sha256_t public_key_;
+};
 
 class tx
 {
@@ -72,9 +86,9 @@ public:
         uint64_t height{0};
         uint64_t timestamp{0};
         uint64_t tx_count{0};
-        hash256_t hash;
-        hash256_t merkel_root_hash; //TODO
-        hash256_t prev_hash;
+        sha256_t hash;
+        sha256_t merkel_root_hash; //TODO
+        sha256_t prev_hash;
         
     };
 

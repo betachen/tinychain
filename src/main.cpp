@@ -13,8 +13,8 @@ int main(int argc, char* argv[])
 
     log::info("main")<<"started";
 
-    consensus::consensus t1;
-    blockchain::blockchain t2;
+    consensus t1;
+    blockchain t2;
 
     std::string input = "grape";
     auto&& output1 = sha256(input);

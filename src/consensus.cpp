@@ -4,12 +4,9 @@
 namespace tinychain
 {
 
-namespace consensus
-{
 
 void consensus::test(){}
 
-} //consensus
 
 } //tinychain
 
