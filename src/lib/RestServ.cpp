@@ -75,14 +75,13 @@ void RestServ::websocketSend(mg_connection* nc, const char* msg, size_t len)
 // --------------------- websocket interface -----------------------
 void RestServ::websocketSend(mg_connection& nc, WebsocketMessage ws) 
 {
-
     //process here
     std::stringstream sout;
-    std::istringstream sin;
     try{
         ws.data_to_arg();
+        //command_args cmd{ws.argc(), ws.argv()};
         //process here
-        sout<<"test wbsocket";
+        sout<<"-----test wbsocket";
 
     } catch(std::exception& e) {
         sout << e.what();
@@ -104,13 +103,11 @@ void RestServ::httpRpcRequest(mg_connection& nc, HttpMessage data)
             throw ForbiddenException{"URI not support"};
         }
 
+        std::stringstream sout;
         //process here
         data.data_to_arg();
 
-        std::stringstream sout;
-        std::istringstream sin;
-        sout<<"JSON rpc test";
-
+        sout<<"----JSON rpc test";
 
         out_<<sout.str();
 
@@ -137,8 +134,8 @@ void RestServ::httpRequest(mg_connection& nc, HttpMessage data)
         }
         uri_.pop();
 
-            state_|= MatchUri;
-            state_|= MatchMethod;
+        state_|= MatchUri;
+        state_|= MatchMethod;
 
     } catch (const std::exception& e) {
         out_ << e.what();

@@ -4,6 +4,7 @@
 #include <tinychain/consensus.hpp>
 #include <tinychain/network.hpp>
 #include <tinychain/blockchain.hpp>
+#include <metaverse/mgbubble.hpp>
 
 namespace tinychain
 {
@@ -11,7 +12,13 @@ namespace tinychain
 class node
 {
 public:
-    node() noexcept = default;
+    node() noexcept {
+        // bind
+        auto& conn = rest_server_.bind("0.0.0.0:8000");
+        // init for websocket and seesion control
+        mg_set_protocol_http_websocket(&conn);
+        mg_set_timer(&conn, mg_time() + mgbubble::RestServ::session_check_interval);
+    }
     node(const node&) noexcept = default;
     node(node&&) noexcept = default;
     node& operator=(node&&) noexcept = default;
@@ -20,13 +27,20 @@ public:
     void print(){ std::cout<<"class node"<<std::endl; }
     void test();
     bool check();
-    bool run();
+    void run() {
+        for (;;)
+            rest_server_.poll(1000);
+    }
 
 private:
+    mgbubble::RestServ rest_server_{"webroot"};
+
     blockchain blockchain_;
     network network_;
     consensus consensus_;
     key_pair_database key_pair_database_;
 };
+
+
 
 }// tinychain

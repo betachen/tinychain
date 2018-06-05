@@ -1,7 +1,5 @@
 #include <tinychain/tinychain.hpp>
-#include <tinychain/blockchain.hpp>
-#include <tinychain/consensus.hpp>
-#include <metaverse/mgbubble.hpp>
+#include <tinychain/node.hpp>
 
 using namespace tinychain;
 
@@ -13,13 +11,11 @@ int main(int argc, char* argv[])
 
     log::info("main")<<"started";
 
-    consensus t1;
-    blockchain t2;
+    //std::string input = "grape";
+    //auto&& output1 = sha256(input);
+    //log::info("main") << "sha256('"<< input << "'):" << output1;
 
-    std::string input = "grape";
-    auto&& output1 = sha256(input);
-    log::info("main") << "sha256('"<< input << "'):" << output1;
-
+#if 0
     // bind
     mgbubble::RestServ rest_server_("webroot");
     auto& conn = rest_server_.bind("0.0.0.0:8000");
@@ -31,9 +27,10 @@ int main(int argc, char* argv[])
     // run
     for (;;)
         rest_server_.poll(1000);
+#endif
 
-    t1.print();
-    t2.print();
+    node my_node;
+    my_node.run();
 
     return 0;
 }
