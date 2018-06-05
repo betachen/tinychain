@@ -5,6 +5,7 @@
 
 using namespace tinychain;
 
+// global logger
 Logger logger;
 
 int main(int argc, char* argv[])
@@ -16,7 +17,7 @@ int main(int argc, char* argv[])
     blockchain::blockchain t2;
 
     // bind
-    mgbubble::RestServ rest_server_("html");
+    mgbubble::RestServ rest_server_("webroot");
     auto& conn = rest_server_.bind("0.0.0.0:8000");
 
     // init for websocket and seesion control

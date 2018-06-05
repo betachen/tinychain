@@ -1,5 +1,3 @@
-#include <iostream>
-#include <string>
 #include <tinychain/logging.hpp>
 
 namespace tinychain

@@ -19,6 +19,6 @@ $ make
 On workpath of tinychain:
 ```
 $ cd build/bin
-$ mkdir html && cp ../../etc/index.html html
+$ mkdir -p webroot && cp -f ../../etc/index.html webroot
 $ ./tinychain
 ```
