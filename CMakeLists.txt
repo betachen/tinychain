@@ -65,11 +65,15 @@ INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/include")
 
 IF(ENABLE_SHARED_LIBS)
   SET(mongoose_LIBRARY mongoose_shared)
+  SET(jsoncpp_LIBRARY jsoncpp_shared)
 ELSE()
   SET(mongoose_LIBRARY mongoose_static)
+  SET(jsoncpp_LIBRARY jsoncpp_static)
 ENDIF()
 
 ENABLE_TESTING()
 
 ADD_SUBDIRECTORY(contrib)
 ADD_SUBDIRECTORY(src)
+ADD_SUBDIRECTORY(cli-tinychain)
+
