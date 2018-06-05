@@ -15,7 +15,7 @@
     }
     #messages {
       border: 2px solid #fec; border-radius: 1em;
-      height: 10em; overflow: scroll; padding: 0.5em 1em;
+      height: 30em; overflow: scroll; padding: 0.5em 1em;
     }
     a:link, a:visited { color: #69c; text-decoration: none; }
     @media (max-width: 700px) {
@@ -56,16 +56,10 @@
 </head>
 <body>
   <div class="content">
-    <h1>Websocket PubSub Demonstration</h1>
+    <h1>Tinychain Websocket Page</h1>
 
     <p>
-      This page demonstrates how Mongoose could be used to implement
-      <a href="http://en.wikipedia.org/wiki/Publish%E2%80%93subscribe_pattern">
-       publish–subscribe pattern</a>. Open this page in several browser
-       windows. Each window initiates persistent
-       <a href="http://en.wikipedia.org/wiki/WebSocket">WebSocket</a>
-      connection with the server, making each browser window a websocket client.
-      Send messages, and see messages sent by other clients.
+      This page demonstrates how Tinychain works. commands are: getnewaccount; startmining $address; send $amount $address;
     </p>
 
     <div id="messages">

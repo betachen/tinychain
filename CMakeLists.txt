@@ -29,7 +29,6 @@ SET(COMMON_ARGS "${COMMON_FLAGS} ${COMMON_WARN} ${COMMON_LIBS}")
 # --------------- Compiler ------------------
 IF("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
   SET(CMAKE_C_FLAGS "-std=c11 ${COMMON_ARGS}")
-  #libtinychain has too many ignored-qualifiers, and TODOs
   SET(CMAKE_CXX_FLAGS "-std=c++14 ${COMMON_ARGS} -fno-enforce-eh-specs -fnothrow-opt -Wno-reorder -Wno-ignored-qualifiers -Wno-unused-function")
 ELSEIF("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
   SET(CMAKE_C_FLAGS "-std=c11 ${COMMON_ARGS}")
@@ -53,15 +52,13 @@ FILE(MAKE_DIRECTORY "${LIBRARY_OUTPUT_PATH}")
 
 SET(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH}" "${PROJECT_SOURCE_DIR}/etc")
 #SET(CMAKE_INSTALL_PREFIX ${PROJECT_BINARY_DIR})
-SET(CMAKE_INSTALL_PREFIX "/usr/local/mvs")
+SET(CMAKE_INSTALL_PREFIX "/usr/local/tinychain")
 
-set(Boost_USE_STATIC_LIBS   ON)
-FIND_PACKAGE(Boost 1.56 REQUIRED COMPONENTS date_time filesystem system program_options)
-#FIND_PACKAGE(Boost 1.56 REQUIRED COMPONENTS date_time filesystem system program_options regex thread)
-#FIND_PACKAGE(secp256k1 REQUIRED)
+#set(Boost_USE_STATIC_LIBS   ON)
+#FIND_PACKAGE(Boost 1.56 REQUIRED COMPONENTS date_time filesystem system program_options)
+#INCLUDE_DIRECTORIES("${Boost_INCLUDE_DIRS}")
 
 # ------------------ includes --------------------
-INCLUDE_DIRECTORIES("${Boost_INCLUDE_DIRS}")
 INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/contrib")
 INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/include")
 
