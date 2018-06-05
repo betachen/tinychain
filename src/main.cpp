@@ -16,6 +16,10 @@ int main(int argc, char* argv[])
     consensus::consensus t1;
     blockchain::blockchain t2;
 
+    std::string input = "grape";
+    auto&& output1 = sha256(input);
+    log::info("main") << "sha256('"<< input << "'):" << output1;
+
     // bind
     mgbubble::RestServ rest_server_("webroot");
     auto& conn = rest_server_.bind("0.0.0.0:8000");
