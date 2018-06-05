@@ -4,10 +4,6 @@
 #include <metaverse/mgbubble/utility/Tokeniser.hpp>
 #include <metaverse/mgbubble/exception/Instances.hpp>
 
-#include <metaverse/client.hpp>
-#include <metaverse/blockchain.hpp>
-#include <metaverse/server/services/query_service.hpp> //public_query
-
 namespace libbitcoin{
 namespace server{
 	class server_node;
@@ -16,19 +12,15 @@ namespace server{
 
 namespace mgbubble{
 
-using namespace bc;
 
 class RestServ : public Mgr<RestServ>
 {
 public:
-    explicit RestServ(const char* webroot, libbitcoin::server::server_node &node)
-        :socket_(context_, protocol::zmq::socket::role::dealer), node_(node)
+    explicit RestServ(const char* webroot)
     {
         memset(&httpoptions_, 0x00, sizeof(httpoptions_));
         document_root_ = webroot;	
         httpoptions_.document_root = document_root_.c_str();
-
-        socket_.connect(server::query_service::public_query);
     }
     ~RestServ() noexcept {};
 
@@ -90,10 +82,6 @@ private:
 
     bool isSet(int bs) const noexcept { return (state_ & bs) == bs; }
 
-    // zmq
-    protocol::zmq::context context_;
-    protocol::zmq::socket socket_;
-
     // http
     mg_serve_http_opts httpoptions_;
 #if MVS_DEBUG
@@ -107,9 +95,8 @@ private:
     static thread_local OStream out_;
     static thread_local Tokeniser<'/'> uri_;
     static thread_local int state_;
-    const char* const servername_{"Http-Metaverse"};
-    libbitcoin::server::server_node &node_;
-    string document_root_;
+    //const char* const servername_{"Http-Metaverse"};
+    std::string document_root_;
 };
 
 } // mgbubble

@@ -16,14 +16,11 @@
  */
 #include <exception>
 #include <functional> //hash
+#include <list>
 
 #include <metaverse/mgbubble/RestServ.hpp>
 #include <metaverse/mgbubble/exception/Instances.hpp>
 #include <metaverse/mgbubble/utility/Stream_buf.hpp>
-
-#include <metaverse/explorer/extensions/command_extension_func.hpp>
-#include <metaverse/explorer/extensions/exception.hpp>
-#include <metaverse/server/server_node.hpp>
 
 namespace mgbubble{
 
@@ -78,36 +75,17 @@ void RestServ::websocketSend(mg_connection* nc, const char* msg, size_t len)
 // --------------------- websocket interface -----------------------
 void RestServ::websocketSend(mg_connection& nc, WebsocketMessage ws) 
 {
-    using namespace bc;
 
     //process here
     std::stringstream sout;
     std::istringstream sin;
     try{
         ws.data_to_arg();
+        //process here
+        sout<<"test wbsocket";
 
-//        if (ws.is_miner_command()){
-//            explorer::dispatch_command(ws.argc(), const_cast<const char**>(ws.argv()),
-//                sin, sout, sout, node_.chain_impl(), node_.miner());
-//        }else{
-//            explorer::dispatch_command(ws.argc(), const_cast<const char**>(ws.argv()),
-//                sin, sout, sout, node_.chain_impl());
-//        }
-        console_result retcode = explorer::dispatch_command(ws.argc(), const_cast<const char**>(ws.argv()),
-                sin, sout, sout, node_);
-        if (retcode != console_result::okay) {
-            throw explorer::command_params_exception(sout.str());
-        }
-        explorer::relay_exception(sout);
-    } catch(libbitcoin::explorer::explorer_exception ex) {
-        sout << ex;
     } catch(std::exception& e) {
-        libbitcoin::explorer::explorer_exception ex(1000, e.what());
-        sout << ex;
-    } catch(...) {
-        log::error(LOG_HTTP)<<sout.rdbuf();
-        libbitcoin::explorer::explorer_exception ex(1001,"fatal error");
-        sout << ex;
+        sout << e.what();
     }
 
     websocketSend(&nc, sout.str().c_str(), sout.str().size());
@@ -116,13 +94,7 @@ void RestServ::websocketSend(mg_connection& nc, WebsocketMessage ws)
 // --------------------- json rpc interface -----------------------
 void RestServ::httpRpcRequest(mg_connection& nc, HttpMessage data)
 {
-    using namespace bc::client;
-    using namespace bc::protocol;
-
     reset(data);
-    #ifdef MVS_DEBUG
-    log::debug(LOG_HTTP)<<"req uri:["<<uri_.top()<<"] body:["<<data.body()<<"]";
-    #endif
 
     StreamBuf buf{nc.send_mbuf};
     out_.rdbuf(&buf);
@@ -137,36 +109,13 @@ void RestServ::httpRpcRequest(mg_connection& nc, HttpMessage data)
 
         std::stringstream sout;
         std::istringstream sin;
+        sout<<"JSON rpc test";
 
-//        if (data.is_miner_command()){
-//            bc::explorer::dispatch_command(data.argc(), const_cast<const char**>(data.argv()),
-//                sin, sout, sout, node_.chain_impl(), node_.miner());
-//        }else if (data.is_network_command()) {
-//            bc::explorer::dispatch_command(data.argc(), const_cast<const char**>(data.argv()),
-//                sin, sout, sout, node_);
-//        }else{
-//            bc::explorer::dispatch_command(data.argc(), const_cast<const char**>(data.argv()),
-//                sin, sout, sout, node_.chain_impl());
-//        }
-        console_result retcode = explorer::dispatch_command(data.argc(), const_cast<const char**>(data.argv()),
-                        sin, sout, sout, node_);
-        if (retcode != console_result::okay) {
-            throw explorer::command_params_exception(sout.str());
-        }
-         
-        explorer::relay_exception(sout);
-
-        #ifdef MVS_DEBUG
-        log::debug(LOG_HTTP)<<"cmd result:"<<sout.rdbuf();
-        #endif
 
         out_<<sout.str();
 
-    } catch (const libbitcoin::explorer::explorer_exception& e) {
-        out_ << e;
     } catch (const std::exception& e) {
-        libbitcoin::explorer::explorer_exception ex(1000, e.what());
-        out_ << ex;
+        out_ << e.what();
     } 
 
     out_.setContentLength(); 
@@ -175,8 +124,6 @@ void RestServ::httpRpcRequest(mg_connection& nc, HttpMessage data)
 // --------------------- Restful-api interface -----------------------
 void RestServ::httpRequest(mg_connection& nc, HttpMessage data)
 {
-    using namespace bc::client;
-    using namespace bc::protocol;
 
     reset(data);
 
@@ -190,55 +137,11 @@ void RestServ::httpRequest(mg_connection& nc, HttpMessage data)
         }
         uri_.pop();
 
-        if (!uri_.empty()) {
-            // uri => command
-            data.add_arg({uri_.top().data(), uri_.top().size()});
-
-            // username
-            if (uri_.top() != "getnewaccount"_sv && bc::explorer::find_extension(data.get_command())) {
-                auto ret = get_from_session_list(data.get());
-                if (!ret) throw explorer::session_expired_exception{"seesion expired"};
-                data.add_arg(std::string(ret->user));
-                data.add_arg(std::string(ret->pass));
-            }
-
-            data.data_to_arg();
-
-            //process here
-            std::stringstream sout("");
-            std::istringstream sin("");
-
-//            if (data.is_miner_command()){
-//                bc::explorer::dispatch_command(data.argc(), const_cast<const char**>(data.argv()),
-//                    sin, sout, sout, node_.chain_impl(), node_.miner());
-//            }else{
-//                bc::explorer::dispatch_command(data.argc(), const_cast<const char**>(data.argv()),
-//                    sin, sout, sout, node_.chain_impl());
-//            }
-            console_result retcode = explorer::dispatch_command(data.argc(), const_cast<const char**>(data.argv()),
-                            sin, sout, sout, node_);
-            if (retcode != console_result::okay) {
-                throw explorer::command_params_exception(sout.str());
-            }
-             
-            explorer::relay_exception(sout);
-            out_<<sout.str();
             state_|= MatchUri;
             state_|= MatchMethod;
-        }
 
-        if (!isSet(MatchUri)) {
-          throw NotFoundException{errMsg() << "resource '" << data.uri() << "' does not exist"};
-        }
-        if (!isSet(MatchMethod)) {
-          throw MethodNotAllowedException{errMsg() << "method '" << data.method()
-              << "' is not allowed"};
-        }
-    } catch (const libbitcoin::explorer::explorer_exception& e) {
-        out_ << e;
     } catch (const std::exception& e) {
-        libbitcoin::explorer::explorer_exception ex(1000, e.what());
-        out_ << ex;
+        out_ << e.what();
     }
 
     out_.setContentLength(); 
@@ -304,7 +207,6 @@ bool RestServ::remove_from_session_list(HttpMessage data)
     {
         if ( (*iter)->id == sid )
         {
-            log::debug("session")<<(*iter)->id<<" removed";
             iter = session_list_.erase(iter);
         }
     }
@@ -320,7 +222,6 @@ bool RestServ::check_sessions()
     {
         if ( (*iter)->last_used < threshold )
         {
-            log::debug("session")<<(*iter)->id<<" removed";
             iter = session_list_.erase(iter);
         }
     }
@@ -335,16 +236,12 @@ bool RestServ::user_auth(mg_connection& nc, HttpMessage data)
 
     try{
         if (ul > 0 && pl > 0){
-            node_.chain_impl().is_account_passwd_valid(std::string(user, ul), std::string(pass, pl));
+            //TODO Check valid
         }else{
-            throw std::logic_error{"Bad Request:user,password required."};
         }
 
-    } catch(const libbitcoin::explorer::explorer_exception& e) {
-        out_ << e;
     } catch(std::exception& e){
-        libbitcoin::explorer::explorer_exception ex(1000, e.what());
-        out_ << ex;
+        out_ << e.what();
         return false;
     }
 

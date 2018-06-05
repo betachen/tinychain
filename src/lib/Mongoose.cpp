@@ -15,6 +15,7 @@
  * 02110-1301, USA.
  */
 #include <cctype>
+#include <array>
 #include <json/minijson_reader.hpp>
 #include <metaverse/mgbubble/Mongoose.hpp>
 #include <metaverse/mgbubble/utility/Tokeniser.hpp>
@@ -113,7 +114,7 @@ void HttpMessage::data_to_arg() {
      * ******************************************/
     if (uri().substr(0,4) == "/api")
     {
-        std::array<char, 4096> params{0x00};
+        std::array<char, 4096> params{{0x00}};
         auto len = mg_get_http_var(&impl_->body, "params", params.data(), params.max_size());
 
         convert({nullptr, 0u}, 
