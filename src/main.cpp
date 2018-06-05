@@ -5,8 +5,12 @@
 
 using namespace tinychain;
 
+Logger logger;
+
 int main(int argc, char* argv[])
 {
+
+    log::info("main")<<"started";
 
     consensus::consensus t1;
     blockchain::blockchain t2;
