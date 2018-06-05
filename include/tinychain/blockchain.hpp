@@ -5,57 +5,6 @@ namespace tinychain
 namespace blockchain
 {
 
-class tx
-{
-public:
-    typedef std::vector<std::string> input_t;
-    typedef std::vector<std::string> output_t;
-
-    tx() noexcept = default;
-    tx(const tx&) noexcept = default;
-    tx(tx&&) noexcept = default;
-    tx& operator=(tx&&) noexcept = default;
-    tx& operator=(const tx&) noexcept = default;
-
-    void print(){ std::cout<<"class tx"<<std::endl; }
-    void test();
-
-private:
-    input_t input_;
-    output_t output_;
-};
-
-class block
-{
-public:
-    typedef std::vector<tx> tx_t;
-
-    block() noexcept = default;
-    block(const block&) noexcept = default;
-    block(block&&) noexcept = default;
-    block& operator=(block&&) noexcept = default;
-    block& operator=(const block&) noexcept = default;
-
-    void print(){ std::cout<<"class block"<<std::endl; }
-    void test();
-
-    struct blockheader {
-        uint64_t nonce{0};
-        uint64_t height{0};
-        uint64_t timestamp{0};
-        uint64_t tx_count{0};
-        std::string hash;
-        std::string merkel_root_hash;
-        std::string prev_hash;
-        
-    };
-
-private:
-    blockheader header_;
-    tx_t tx_;
-};
-
-
 class blockchain
 {
 public:
@@ -72,7 +21,7 @@ public:
 
     struct chain_id {
         uint64_t id{0};
-        std::string genesis_hash;
+        hash256_t genesis_hash;
     };
 
 private:
