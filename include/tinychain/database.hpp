@@ -1,6 +1,7 @@
 #pragma once
 #include <tinychain/tinychain.hpp>
 #include <metaverse/mgbubble/utility/Queue.hpp>
+#include <deque>
 
 namespace tinychain
 {
@@ -23,7 +24,7 @@ protected:
 
 };
 
-class chain_database
+class chain_database: public Queue<block>
 {
 public:
     // thread safty
@@ -38,17 +39,42 @@ public:
     void print(){ std::cout<<"class chain_database"<<std::endl; }
     void test();
 
-    uint64_t height() { return chain_database_.count(); }
+    uint64_t height() { return count(); }
 
-    void push_block(const block& new_block){
-        chain_database_.push(new_block);
+    bool get_block (const sha256_t block_hash, block& b) {
+        auto iter = std::find_if(queue_.begin(), queue_.end(), [&block_hash](const block& b){
+                return b.hash() == block_hash;
+                });
+        if (iter == queue_.end()) {
+            return false;
+        }
+        b = *iter;
+        return true;
     }
-    bool pop(block& front){
-        return chain_database_.pop(front);
+
+    bool get_tx (const sha256_t tx_hash, tx& t) {
+        auto iter = std::find_if(queue_.begin(), queue_.end(), [&tx_hash, &t](const block& b){
+                auto&& tl = b.tx_list();
+                auto iter2 = std::find_if(tl.begin(), tl.end(), [&tx_hash, &t](const tx& t){
+                return t.hash() == tx_hash;
+                });
+                if (iter2 == tl.end()) { 
+                    return false;
+                } else {
+                    t = *iter2;
+                    return true;
+                }
+
+                });
+        if (iter == queue_.end()) {
+            return false;
+        }
+        return true;
     }
+
 
 private:
-    chain_database_t chain_database_;
+//    chain_database_t chain_database_;
 };
 
 class key_pair_database

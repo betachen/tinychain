@@ -38,7 +38,7 @@ private:
 
     blockchain blockchain_;
     network network_;
-    consensus consensus_;
+    miner miner_;
     key_pair_database key_pair_database_;
 };
 

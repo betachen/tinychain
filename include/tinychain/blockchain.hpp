@@ -30,8 +30,14 @@ public:
     void test();
 
     void push_block(const block& new_block){
-        chain_.push_block(new_block);
+        chain_.push(new_block);
     }
+
+    bool get_block(sha256_t block_hash, block& out);
+
+    bool get_tx(sha256_t tx_hash, tx& out);
+
+    bool get_balance(address_t address, uint64_t balance);
 
     auto id() {return id_;}
 

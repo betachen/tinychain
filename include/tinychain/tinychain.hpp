@@ -68,16 +68,8 @@ public:
     typedef std::vector<input_item_t> input_t;
     typedef std::vector<output_item_t> output_t;
 
-    tx(address_t address, uint64_t amount) { 
-        //get_balance_from blokchain
-        //TODO
-        auto&& input_item = std::make_pair(sha256(address), 0);
-        inputs_.push_back(input_item);
-
-        // build tx
-        auto&& ouput_item = std::make_pair(address, amount);
-        outputs_.push_back(ouput_item);
-    }
+    tx() {}
+    tx(address_t address, uint64_t amount); 
 
     tx(const tx& rt) {
        inputs_ = rt.inputs(); 
@@ -121,17 +113,20 @@ public:
             outputs.append(item_to_json(each));
         }
         root["outputs"] = outputs;
-        root["hash"] = to_sha256(root);
+        hash_ = to_sha256(root);
+        root["hash"] = hash_;
 
         return root;
     }
 
     input_t inputs() const { return inputs_; }
     output_t outputs() const { return outputs_; }
+    sha256_t hash() const { return hash_; }
 
 private:
     input_t inputs_;
     output_t outputs_;
+    sha256_t hash_;
 };
 
 class block
@@ -179,14 +174,18 @@ public:
 
     Json::Value to_json(){
         Json::Value root;
-        root["nonce"] = header_.nonce;
-        root["height"] = header_.height;
-        root["timestamp"] = header_.timestamp;
-        root["tx_count"] = header_.target;
-        root["target"] = header_.target;
-        root["hash"] = header_.hash;
-        root["merkel_root_hash"] = header_.merkel_root_hash;
-        root["prev_hash"] = header_.prev_hash;
+        Json::Value bheader;
+
+        bheader["nonce"] = header_.nonce;
+        bheader["height"] = header_.height;
+        bheader["timestamp"] = header_.timestamp;
+        bheader["tx_count"] = header_.target;
+        bheader["target"] = header_.target;
+        bheader["hash"] = header_.hash;
+        bheader["merkel_header_hash"] = header_.merkel_root_hash;
+        bheader["prev_hash"] = header_.prev_hash;
+
+        root["header"] = bheader;
 
         Json::Value txs;
         for (auto& tx : tx_list_) {
@@ -202,6 +201,7 @@ public:
         return j.toStyledString();
     }
 
+    sha256_t hash() const { return header_.hash; }
 
 private:
     blockheader header_;

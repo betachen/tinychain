@@ -61,7 +61,7 @@ public:
 		return false;
 	}
 
-private:
+protected:
 	mutable std::mutex lock_;
 	std::condition_variable cond_;
 	std::deque<T> queue_;
