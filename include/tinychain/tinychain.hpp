@@ -5,14 +5,22 @@
 #include <string>
 #include <array>
 #include <random>
+#include <sstream>
 
 namespace tinychain
 {
 
 namespace tc = tinychain;
 
+// ---------------------------- typedef ----------------------------
 typedef std::string sha256_t;
+typedef sha256_t public_key_t;
+typedef public_key_t address_t;
 
+// ---------------------------- ulitity ----------------------------
+sha256_t to_sha256(Json::Value jv);
+
+// ---------------------------- class ----------------------------
 class key_pair
 {
 public:
@@ -54,11 +62,23 @@ private:
 class tx
 {
 public:
-    typedef std::pair<key_pair, uint64_t> tx_item_t;
-    typedef std::vector<tx_item_t> input_t;
-    typedef std::vector<tx_item_t> output_t;
+    typedef std::pair<sha256_t, uint8_t> input_item_t;
+    typedef std::pair<public_key_t, uint64_t> output_item_t;
 
-    tx()  = default;
+    typedef std::vector<input_item_t> input_t;
+    typedef std::vector<output_item_t> output_t;
+
+    tx(address_t address, uint64_t amount) { 
+        //get_balance_from blokchain
+        //TODO
+        auto&& input_item = std::make_pair(sha256(address), 0);
+        inputs_.push_back(input_item);
+
+        // build tx
+        auto&& ouput_item = std::make_pair(address, amount);
+        outputs_.push_back(ouput_item);
+    }
+
     tx(const tx& rt) {
        inputs_ = rt.inputs(); 
        outputs_ = rt.outputs();
@@ -73,15 +93,39 @@ public:
 
     void print(){ std::cout<<"class tx"<<std::endl; }
     void test();
-#if 0
+
+    Json::Value item_to_json(input_item_t in) {
+        Json::Value root;
+        root["hash"] = in.first;
+        root["index"] = in.second;
+        return root;
+    }
+    Json::Value item_to_json(output_item_t out) {
+        Json::Value root;
+        root["address"] = out.first;
+        root["value"] = out.second;
+        return root;
+    }
+
     Json::Value to_json(){
-        //TODO
+        Json::Value root;
+
+        Json::Value inputs;
+        for (auto& each: inputs_) {
+            inputs.append(item_to_json(each));
+        }
+        root["inputs"] = inputs;
+
+        Json::Value outputs;
+        for (auto& each: outputs_) {
+            outputs.append(item_to_json(each));
+        }
+        root["outputs"] = outputs;
+        root["hash"] = to_sha256(root);
+
+        return root;
     }
-    std::string to_string() {
-        auto&& j = to_json();
-        return j.toStyledString();
-    }
-#endif
+
     input_t inputs() const { return inputs_; }
     output_t outputs() const { return outputs_; }
 
@@ -129,7 +173,8 @@ public:
     tx_list_t tx_list() const { return tx_list_; }
     block::blockheader header() const { return header_; }
 
-    void getblocktemplate(block& new_block) const {
+    void collect(const tx& tx) {
+        tx_list_.push_back(tx);
     }
 
     Json::Value to_json(){
@@ -144,11 +189,10 @@ public:
         root["prev_hash"] = header_.prev_hash;
 
         Json::Value txs;
-        root["txs"].resize(1);
-        txs.append("tx");
         for (auto& tx : tx_list_) {
-            txs.append("tx");
+            txs.append(tx.to_json());
         }
+        root["txs"] = txs;
 
         return root;
     }

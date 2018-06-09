@@ -13,11 +13,12 @@ class node
 {
 public:
     node()  noexcept {
-        // bind
+        // http server
         auto& conn = rest_server_.bind("0.0.0.0:8000");
-        // init for websocket and seesion control
         mg_set_protocol_http_websocket(&conn);
         mg_set_timer(&conn, mg_time() + mgbubble::RestServ::session_check_interval);
+
+        // blockchain
     }
     node(const node&)  = default;
     node(node&&)  = default;

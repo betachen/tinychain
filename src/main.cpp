@@ -14,10 +14,15 @@ int main(int argc, char* argv[])
     //std::string input = "grape";
     //auto&& output1 = sha256(input);
     //log::info("main") << "sha256('"<< input << "'):" << output1;
+    //
 
+    tx tx1("tx1_address", 100);
+    tx tx2("tx2_address", 200);
 
     block block1(1);
+    block1.collect(tx1);
     block block2(2);
+    block2.collect(tx2);
     block block3(3);
     blockchain blockchain1;
     blockchain1.push_block(block1);

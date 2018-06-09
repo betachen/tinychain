@@ -23,7 +23,7 @@ public:
         log::info("blockchain")<<"---begin---";
         block b;
         while(chain_.pop(b)) {
-            log::info("block")<<b.header().height;
+            log::info("block")<<b.to_string();
         }
         log::info("blockchain")<<"---end---";
     }
