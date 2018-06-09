@@ -203,8 +203,8 @@ public:
 
     sha256_t hash() const { return header_.hash; }
 
-private:
     blockheader header_;
+private:
     tx_list_t tx_list_;
 };
 

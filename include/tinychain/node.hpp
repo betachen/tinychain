@@ -38,7 +38,7 @@ private:
 
     blockchain blockchain_;
     network network_;
-    miner miner_;
+    miner miner_{blockchain_};
     key_pair_database key_pair_database_;
 };
 

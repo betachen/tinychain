@@ -41,6 +41,8 @@ public:
 
     uint64_t height() { return count(); }
 
+    auto get_last_block() { return queue_.rbegin(); }
+
     bool get_block (const sha256_t block_hash, block& b) {
         auto iter = std::find_if(queue_.begin(), queue_.end(), [&block_hash](const block& b){
                 return b.hash() == block_hash;

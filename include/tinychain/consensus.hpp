@@ -1,5 +1,6 @@
 #pragma once
 #include <tinychain/tinychain.hpp>
+#include <tinychain/blockchain.hpp>
 
 namespace tinychain
 {
@@ -7,16 +8,19 @@ namespace tinychain
 class miner
 {
 public:
-    miner() noexcept = default;
-    miner(const miner&) noexcept = default;
-    miner(miner&&) noexcept = default;
-    miner& operator=(miner&&) noexcept = default;
-    miner& operator=(const miner&) noexcept = default;
+    miner(blockchain& chain):chain_(chain) {};
+    miner(const miner&) = default;
+    miner(miner&&) = default;
+    miner& operator=(miner&&) = default;
+    miner& operator=(const miner&) = default;
 
     void print(){ std::cout<<"class miner"<<std::endl; }
     void test();
 
+    void start();
+
 private:
+    blockchain& chain_;
 };
 
 

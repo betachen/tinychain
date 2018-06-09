@@ -6,6 +6,10 @@ namespace tinychain
 
 void blockchain::test(){}
 
+block blockchain::get_last_block() {
+    return *(chain_.get_last_block());
+}
+
 bool blockchain::get_block(sha256_t block_hash, block& b) {
     if (!chain_.get_block(block_hash, b)) {
         return false;

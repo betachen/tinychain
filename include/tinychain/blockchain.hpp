@@ -9,7 +9,7 @@ namespace tinychain
 class blockchain
 {
 public:
-    typedef std::vector<block> memory_pool_t;
+    typedef block::tx_list_t memory_pool_t;
 
     blockchain(uint16_t id = 3721):id_(id) {
         id_ = id;
@@ -33,6 +33,10 @@ public:
         chain_.push(new_block);
     }
 
+    uint64_t height() { return chain_.height(); }
+
+    block get_last_block(); 
+
     bool get_block(sha256_t block_hash, block& out);
 
     bool get_tx(sha256_t tx_hash, tx& out);
@@ -40,6 +44,8 @@ public:
     bool get_balance(address_t address, uint64_t balance);
 
     auto id() {return id_;}
+
+    memory_pool_t& pool() { return pool_; }
 
 private:
     uint16_t id_;
