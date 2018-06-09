@@ -31,9 +31,14 @@ public:
         private_key_ = rk.private_key(); 
         public_key_ = rk.public_key();
     }
+    key_pair& operator=(const key_pair& rk) {
+        private_key_ = rk.private_key(); 
+        public_key_ = rk.public_key();
+        return *this;
+    }
+
     key_pair(key_pair&&)  = default;
     key_pair& operator=(key_pair&&)  = default;
-    key_pair& operator=(const key_pair&)  = default;
 
     void print(){ std::cout<<"class key_pair"<<std::endl; }
     void test();
@@ -54,32 +59,41 @@ public:
     typedef std::vector<tx_item_t> output_t;
 
     tx()  = default;
-    tx(const tx&)  = default;
+    tx(const tx& rt) {
+       inputs_ = rt.inputs(); 
+       outputs_ = rt.outputs();
+    }
+    tx& operator=(const tx& rt) {
+       inputs_ = rt.inputs(); 
+       outputs_ = rt.outputs();
+       return *this;
+    }
     tx(tx&&)  = default;
     tx& operator=(tx&&)  = default;
-    tx& operator=(const tx&)  = default;
 
     void print(){ std::cout<<"class tx"<<std::endl; }
     void test();
+#if 0
+    Json::Value to_json(){
+        //TODO
+    }
+    std::string to_string() {
+        auto&& j = to_json();
+        return j.toStyledString();
+    }
+#endif
+    input_t inputs() const { return inputs_; }
+    output_t outputs() const { return outputs_; }
 
 private:
-    input_t input_;
-    output_t output_;
+    input_t inputs_;
+    output_t outputs_;
 };
 
 class block
 {
 public:
     typedef std::vector<tx> tx_list_t;
-
-    block()  = default;
-    block(const block&)  = default;
-    block(block&&)  = default;
-    block& operator=(block&&)  = default;
-    block& operator=(const block&)  = default;
-
-    void print(){ std::cout<<"class block"<<std::endl; }
-    void test();
 
     struct blockheader {
         uint64_t nonce{0};
@@ -92,6 +106,57 @@ public:
         sha256_t prev_hash;
         
     };
+
+
+    block(uint64_t h) {header_.height = h;}
+    block(const block& rb) {
+        header_ = rb.header();
+        tx_list_ = rb.tx_list();
+    }
+    block& operator=(const block& rb) {
+        header_ = rb.header();
+        tx_list_ = rb.tx_list();
+        return *this;
+    }
+
+    block(block&&)  = default;
+    block& operator=(block&&)  = default;
+
+    void print(){ std::cout<<"class block"<<std::endl; }
+    void test();
+
+    tx_list_t tx_list() const { return tx_list_; }
+    block::blockheader header() const { return header_; }
+
+    void getblocktemplate(block& new_block) const {
+    }
+
+    Json::Value to_json(){
+        Json::Value root;
+        root["nonce"] = header_.nonce;
+        root["height"] = header_.height;
+        root["timestamp"] = header_.timestamp;
+        root["tx_count"] = header_.target;
+        root["target"] = header_.target;
+        root["hash"] = header_.hash;
+        root["merkel_root_hash"] = header_.merkel_root_hash;
+        root["prev_hash"] = header_.prev_hash;
+
+        Json::Value txs;
+        root["txs"].resize(1);
+        txs.append("tx");
+        for (auto& tx : tx_list_) {
+            txs.append("tx");
+        }
+
+        return root;
+    }
+
+    std::string to_string() {
+        auto&& j = to_json();
+        return j.toStyledString();
+    }
+
 
 private:
     blockheader header_;

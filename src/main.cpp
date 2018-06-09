@@ -15,6 +15,11 @@ int main(int argc, char* argv[])
     //auto&& output1 = sha256(input);
     //log::info("main") << "sha256('"<< input << "'):" << output1;
 
+
+    block block1(1);
+    block block2(2);
+    block block3(3);
+
 #if 0
     // bind
     mgbubble::RestServ rest_server_("webroot");

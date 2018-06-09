@@ -10,13 +10,13 @@ public:
 	Queue() = default;
 	Queue(Queue&&) = default;
 
-	void push(T&& item){
+    void push(T&& item){
     	std::unique_lock<std::mutex> lock(lock_);
     	queue_.push_back(item);
     	cond_.notify_one();
   	}
 
-	void push(T& item){
+	void push(const T& item){
 		std::unique_lock<std::mutex> lock(lock_);
 		queue_.push_back(item);
 		cond_.notify_one();
@@ -27,7 +27,7 @@ public:
 		return queue_.empty();
 	}
 
-	int count(){
+	size_t count(){
 		std::unique_lock<std::mutex> lock(lock_);
 		return queue_.size();
 	}
