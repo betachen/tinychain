@@ -1,7 +1,6 @@
 #pragma once
 #include <tinychain/tinychain.hpp>
 #include <metaverse/mgbubble/utility/Queue.hpp>
-#include <deque>
 
 namespace tinychain
 {
@@ -83,6 +82,7 @@ private:
 //    chain_database_t chain_database_;
 };
 
+// 相当于是本地钱包的私钥管理
 class key_pair_database
 {
 public:
@@ -96,6 +96,12 @@ public:
 
     void print(){ std::cout<<"class key_pair_database"<<std::endl; }
     void test();
+
+    key_pair get_new_key_pair() {
+        key_pair key;
+        key_pair_database_.push_back(key);
+        return key;
+    }
 
 private:
     key_pair_database_t key_pair_database_;

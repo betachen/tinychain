@@ -10,6 +10,12 @@ uint64_t get_now_timestamp() {
     return time_from_epoch.total_seconds();
 }
 
+uint64_t pseudo_random(){
+    std::random_device device;
+    std::uniform_int_distribution<uint64_t> distribution;
+    return distribution(device);
+}
+
 sha256_t to_sha256(Json::Value jv){
     Json::StreamWriterBuilder builder;
     std::ostringstream oss;
@@ -18,7 +24,22 @@ sha256_t to_sha256(Json::Value jv){
     return sha256(oss.str());
 }
 
-tx::tx(address_t address, uint64_t amount) {
+
+tx::tx(address_t& address) {
+    auto&& input_item = std::make_pair("00000000000000000000000000000000", 0);
+    inputs_.push_back(input_item);
+
+    // build tx
+    auto&& ouput_item = std::make_pair(address, 1000);
+    outputs_.push_back(ouput_item);
+
+    // hash
+    to_json();
+}
+
+
+
+tx::tx(address_t& address, uint64_t amount) {
     //get_balance_from blokchain
     //TODO
     auto&& input_item = std::make_pair(sha256(address), 0);

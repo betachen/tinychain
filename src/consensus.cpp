@@ -6,12 +6,13 @@
 namespace tinychain
 {
 
-void miner::start(){
+void miner::start(address_t& addr){
     for(;;) {
         block new_block;
 
+
         // 未找到，继续找
-        if (!pow_once(new_block)) {
+        if (!pow_once(new_block, addr)) {
             continue;
         }
 
@@ -25,7 +26,11 @@ void miner::start(){
     }
 }
 
-bool miner::pow_once(block& new_block) {
+tx miner::create_coinbase_tx(address_t& addr) {
+    return tx{addr};
+}
+
+bool miner::pow_once(block& new_block, address_t& addr) {
 
     auto&& pool = chain_.pool();
 
@@ -40,11 +45,21 @@ bool miner::pow_once(block& new_block) {
     new_block.header_.tx_count = pool.size();
 
     // 难度调整: 
-    // 不可以是0，最小200000, 想修改挖矿速度，请修改这两个数字
-    // 前者控制每块速度，后者控制最快速度，大约6~10秒
-    new_block.header_.difficulty = std::max((new_block.header_.timestamp - prev_block.header_.timestamp) * 18000, 200000ull); // 10 seconds
+    // 控制每块速度，控制最快速度，大约10秒
+    uint64_t time_peroid = new_block.header_.timestamp - prev_block.header_.timestamp;
+    //log::info("consensus") << "target:" << ncan;
+
+    if (time_peroid <= 10u) {
+        new_block.header_.difficulty = prev_block.header_.difficulty + 9000;
+    } else {
+        new_block.header_.difficulty = prev_block.header_.difficulty - 3000;
+    }
     // 计算挖矿目标值,最大值除以难度就目标值
     uint64_t target = 0xffffffffffffffff / prev_block.header_.difficulty;
+
+    // 设置coinbase交易
+    auto&& tx = create_coinbase_tx(addr);
+    pool.push_back(tx);
 
     // 装载交易
     new_block.setup(pool);
@@ -62,6 +77,7 @@ bool miner::pow_once(block& new_block) {
             //log::info("consensus") << "target:" << ncan;
             //log::info("consensus") << "hash  :" << to_sha256(jv_block);
             new_block.header_.hash = can;
+            log::info("consensus") << "new block :" << jv_block.toStyledString();
             log::info("consensus") << "new block :" << can;
             return true;
         }

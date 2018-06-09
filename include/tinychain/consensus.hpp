@@ -16,8 +16,12 @@ public:
 
     void print(){ std::cout<<"class miner"<<std::endl; }
 
-    void start();
-    inline bool pow_once(block& new_block);
+    //开始挖矿
+    void start(address_t& addr);
+    inline bool pow_once(block& new_block, address_t& addr);
+
+    // 填写自己奖励——coinbase
+    tx create_coinbase_tx(address_t& addr);
 
 private:
     blockchain& chain_;

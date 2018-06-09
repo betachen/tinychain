@@ -42,7 +42,8 @@ public:
 
     void miner_run() {
         // miner
-        std::thread miner_service(std::bind(&miner::start, &miner_));
+        auto&& miner_addr = key_pair_database_.get_new_key_pair().address();
+        std::thread miner_service(std::bind(&miner::start, &miner_, miner_addr));
         miner_service.detach();
     }
 

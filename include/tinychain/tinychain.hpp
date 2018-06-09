@@ -15,22 +15,17 @@ namespace tc = tinychain;
 // ---------------------------- typedef ----------------------------
 typedef std::string sha256_t;
 typedef sha256_t public_key_t;
-typedef public_key_t address_t;
+typedef std::string address_t;
 
 // ---------------------------- ulitity ----------------------------
 sha256_t to_sha256(Json::Value jv);
 uint64_t get_now_timestamp();
+uint64_t pseudo_random();
 
 // ---------------------------- class ----------------------------
 class key_pair
 {
 public:
-    static uint64_t pseudo_random()
-    {
-        std::random_device device;
-        std::uniform_int_distribution<uint64_t> distribution;
-        return distribution(device);
-    }
 
     key_pair()  { 
         private_key_ = pseudo_random(); 
@@ -49,9 +44,11 @@ public:
     key_pair(key_pair&&)  = default;
     key_pair& operator=(key_pair&&)  = default;
 
-    void print(){ std::cout<<"class key_pair"<<std::endl; }
+    void print(){log::info("key_pair")<<"pub:["<<public_key_<<"] pri:["<<private_key_<<"]";}
     void test();
 
+    // address 1 开头，截取0~31位公钥
+    address_t address() const { return ("1" + public_key_.substr(0, 30)); }
     sha256_t public_key() const { return public_key_; }
     uint64_t private_key() const { return private_key_; }
 
@@ -70,7 +67,8 @@ public:
     typedef std::vector<output_item_t> output_t;
 
     tx() {}
-    tx(address_t address, uint64_t amount); 
+    tx(address_t& address); //coinbase
+    tx(address_t& address, uint64_t amount); 
 
     tx(const tx& rt) {
        inputs_ = rt.inputs(); 
