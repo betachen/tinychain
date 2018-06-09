@@ -30,19 +30,20 @@ public:
     void test();
     bool check();
     void run() {
-        miner_run();
-
         log::info("node")<<"node started";
-        blockchain_.print();
-
         log::info("node")<<"httpserver started";
         for (;;)
             rest_server_.poll(1000);
     }
 
-    void miner_run() {
+    void miner_run(address_t address) {
         // miner
-        auto&& miner_addr = key_pair_database_.get_new_key_pair().address();
+        address_t miner_addr;
+        if (address.empty()){
+            miner_addr = key_pair_database_.get_new_key_pair().address();
+        } else {
+            miner_addr = address;
+        }
         std::thread miner_service(std::bind(&miner::start, &miner_, miner_addr));
         miner_service.detach();
     }

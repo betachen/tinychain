@@ -1,3 +1,4 @@
+#pragma once
 #include <list>
 #include <metaverse/mgbubble/Mongoose.hpp>
 #include <metaverse/mgbubble/utility/Stream_buf.hpp>
@@ -5,11 +6,6 @@
 #include <metaverse/mgbubble/exception/Instances.hpp>
 #include <tinychain/blockchain.hpp>
 
-namespace libbitcoin{
-namespace server{
-	class server_node;
-}
-}
 
 namespace mgbubble{
 
