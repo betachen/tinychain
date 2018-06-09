@@ -14,10 +14,10 @@ public:
     blockchain(uint16_t id = 3721):id_(id) {
         id_ = id;
     }
-    blockchain(const blockchain&) noexcept = default;
-    blockchain(blockchain&&) noexcept = default;
-    blockchain& operator=(blockchain&&) noexcept = default;
-    blockchain& operator=(const blockchain&) noexcept = default;
+    blockchain(const blockchain&)  = default;
+    blockchain(blockchain&&)  = default;
+    blockchain& operator=(blockchain&&)  = default;
+    blockchain& operator=(const blockchain&)  = default;
 
     void print(){ std::cout<<"class blockchain"<<std::endl; }
     void test();
