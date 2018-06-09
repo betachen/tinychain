@@ -1,4 +1,5 @@
 #pragma once
+#include <thread>
 #include <tinychain/tinychain.hpp>
 #include <tinychain/database.hpp>
 #include <tinychain/consensus.hpp>
@@ -20,17 +21,29 @@ public:
 
         // blockchain
     }
+
     node(const node&)  = default;
     node(node&&)  = default;
     node& operator=(node&&)  = default;
     node& operator=(const node&)  = default;
 
-    void print(){ std::cout<<"class node"<<std::endl; }
     void test();
     bool check();
     void run() {
+        miner_run();
+
+        log::info("node")<<"node started";
+        blockchain_.print();
+
+        log::info("node")<<"httpserver started";
         for (;;)
             rest_server_.poll(1000);
+    }
+
+    void miner_run() {
+        // miner
+        std::thread miner_service(std::bind(&miner::start, &miner_));
+        miner_service.detach();
     }
 
 private:

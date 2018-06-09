@@ -15,9 +15,9 @@ public:
     miner& operator=(const miner&) = default;
 
     void print(){ std::cout<<"class miner"<<std::endl; }
-    void test();
 
     void start();
+    inline bool pow_once(block& new_block);
 
 private:
     blockchain& chain_;

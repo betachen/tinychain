@@ -37,6 +37,7 @@ void blockchain::create_genesis_block() {
 
     genesis_block_.header_.hash = to_sha256(genesis_block_.to_json());
 
+    push_block(genesis_block_);
 }
 
 } //tinychain

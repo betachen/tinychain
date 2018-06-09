@@ -21,12 +21,9 @@ public:
     blockchain& operator=(const blockchain&)  = default;
 
     void print(){
-        log::info("blockchain")<<"---begin---";
-        block b;
-        while(chain_.pop(b)) {
-            log::info("block")<<b.to_string();
-        }
-        log::info("blockchain")<<"---end---";
+        log::info("blockchain")<<"--------begin--------";
+        chain_.print();
+        log::info("blockchain")<<"--------end--------";
     }
     void test();
 
@@ -46,7 +43,8 @@ public:
 
     auto id() {return id_;}
 
-    memory_pool_t& pool() { return pool_; }
+    memory_pool_t pool() { return pool_; }
+    void pool_reset() { pool_.clear(); }
 
     void collect(const tx& tx) {
         pool_.push_back(tx);

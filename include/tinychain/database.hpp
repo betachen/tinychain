@@ -36,7 +36,11 @@ public:
     chain_database& operator=(chain_database&&)  = default;
     chain_database& operator=(const chain_database&)  = default;
 
-    void print(){ std::cout<<"class chain_database"<<std::endl; }
+    void print(){
+        for (auto& each : queue_ ) {
+            log::info("block")<<each.to_string();
+        };
+    }
     void test();
 
     uint64_t height() { return count(); }
