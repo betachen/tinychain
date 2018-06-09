@@ -1,5 +1,6 @@
 # tinychain
 A mini blockchain implementation in C++14
+构建迷你区块链——《深入浅出区块链》
 
 ## toolchain
 * gcc/clang support C++14
