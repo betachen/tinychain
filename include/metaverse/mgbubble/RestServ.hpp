@@ -3,6 +3,7 @@
 #include <metaverse/mgbubble/utility/Stream_buf.hpp>
 #include <metaverse/mgbubble/utility/Tokeniser.hpp>
 #include <metaverse/mgbubble/exception/Instances.hpp>
+#include <tinychain/blockchain.hpp>
 
 namespace libbitcoin{
 namespace server{
@@ -16,7 +17,7 @@ namespace mgbubble{
 class RestServ : public Mgr<RestServ>
 {
 public:
-    explicit RestServ(const char* webroot)
+    explicit RestServ(const char* webroot, tinychain::blockchain& rb):chain_(rb)
     {
         memset(&httpoptions_, 0x00, sizeof(httpoptions_));
         document_root_ = webroot;	
@@ -97,6 +98,8 @@ private:
     static thread_local int state_;
     //const char* const servername_{"Http-Metaverse"};
     std::string document_root_;
+
+    tinychain::blockchain& chain_;
 };
 
 } // mgbubble

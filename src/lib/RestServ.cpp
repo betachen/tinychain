@@ -22,6 +22,8 @@
 #include <metaverse/mgbubble/exception/Instances.hpp>
 #include <metaverse/mgbubble/utility/Stream_buf.hpp>
 
+#include <tinychain/commands.hpp>
+
 namespace mgbubble{
 
 thread_local OStream RestServ::out_;
@@ -79,9 +81,11 @@ void RestServ::websocketSend(mg_connection& nc, WebsocketMessage ws)
     std::stringstream sout;
     try{
         ws.data_to_arg();
-        //command_args cmd{ws.argc(), ws.argv()};
-        //process here
-        sout<<"-----test wbsocket";
+        tinychain::commands cmd{ws.vargv(), chain_};
+        Json::Value ret;
+        cmd.exec(ret);
+
+        sout<<ret.toStyledString();
 
     } catch(std::exception& e) {
         sout << e.what();
@@ -103,13 +107,13 @@ void RestServ::httpRpcRequest(mg_connection& nc, HttpMessage data)
             throw ForbiddenException{"URI not support"};
         }
 
-        std::stringstream sout;
         //process here
         data.data_to_arg();
+        tinychain::commands cmd{data.vargv(), chain_};
+        Json::Value ret;
+        cmd.exec(ret);
 
-        sout<<"----JSON rpc test";
-
-        out_<<sout.str();
+        out_<<ret.toStyledString();
 
     } catch (const std::exception& e) {
         out_ << e.what();

@@ -45,6 +45,7 @@ class ToCommandArg{
 public:
     auto argv() const noexcept { return argv_; }
     auto argc() const noexcept { return argc_; }
+    const auto& vargv() const noexcept { return vargv_; }
     const auto& get_command() const { 
         if(!vargv_.empty()) 
             return vargv_[0]; 

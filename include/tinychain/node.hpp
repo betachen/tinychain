@@ -48,10 +48,10 @@ public:
     }
 
 private:
-    mgbubble::RestServ rest_server_{"webroot"};
 
-    blockchain blockchain_;
     network network_;
+    blockchain blockchain_;
+    mgbubble::RestServ rest_server_{"webroot", blockchain_};
     miner miner_{blockchain_};
     key_pair_database key_pair_database_;
 };
