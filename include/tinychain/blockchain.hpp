@@ -13,6 +13,7 @@ public:
 
     blockchain(uint16_t id = 3721):id_(id) {
         id_ = id;
+        create_genesis_block();
     }
     blockchain(const blockchain&)  = default;
     blockchain(blockchain&&)  = default;
@@ -47,9 +48,15 @@ public:
 
     memory_pool_t& pool() { return pool_; }
 
+    void collect(const tx& tx) {
+        pool_.push_back(tx);
+    }
+
+    void create_genesis_block();
+
 private:
     uint16_t id_;
-    sha256_t genesis_hash_{"0F78FCC486F5315418FBF095E71C0675EE07D318E5AC4D150050CD8E57966496"};
+    block genesis_block_;
     chain_database chain_; 
     memory_pool_t pool_;
 };

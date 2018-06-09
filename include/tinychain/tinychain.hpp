@@ -19,6 +19,7 @@ typedef public_key_t address_t;
 
 // ---------------------------- ulitity ----------------------------
 sha256_t to_sha256(Json::Value jv);
+uint64_t get_now_timestamp();
 
 // ---------------------------- class ----------------------------
 class key_pair
@@ -139,7 +140,7 @@ public:
         uint64_t height{0};
         uint64_t timestamp{0};
         uint64_t tx_count{0};
-        uint64_t target{0};
+        uint64_t difficulty{0};
         sha256_t hash;
         sha256_t merkel_root_hash; //TODO
         sha256_t prev_hash;
@@ -168,10 +169,6 @@ public:
     tx_list_t tx_list() const { return tx_list_; }
     block::blockheader header() const { return header_; }
 
-    void collect(const tx& tx) {
-        tx_list_.push_back(tx);
-    }
-
     Json::Value to_json(){
         Json::Value root;
         Json::Value bheader;
@@ -179,8 +176,8 @@ public:
         bheader["nonce"] = header_.nonce;
         bheader["height"] = header_.height;
         bheader["timestamp"] = header_.timestamp;
-        bheader["tx_count"] = header_.target;
-        bheader["target"] = header_.target;
+        bheader["tx_count"] = header_.tx_count;
+        bheader["difficulty"] = header_.difficulty;
         bheader["hash"] = header_.hash;
         bheader["merkel_header_hash"] = header_.merkel_root_hash;
         bheader["prev_hash"] = header_.prev_hash;
@@ -202,6 +199,8 @@ public:
     }
 
     sha256_t hash() const { return header_.hash; }
+
+    void setup(tx_list_t& txs) {tx_list_.swap(txs);}
 
     blockheader header_;
 private:

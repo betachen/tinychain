@@ -19,10 +19,20 @@ int main(int argc, char* argv[])
     tx tx1("tx1_address", 100);
     tx tx2("tx2_address", 200);
 
+    tx tx3("tx3_address", 300);
+    tx tx4("tx4_address", 400);
+
+    blockchain::memory_pool_t p;
+    p.push_back(tx1);
+    p.push_back(tx2);
+
     block block1(1);
-    block1.collect(tx1);
+    block1.setup(p);
+
+    p.push_back(tx3);
     block block2(2);
-    block2.collect(tx2);
+    block2.setup(p);
+
     block block3(3);
     blockchain blockchain1;
     blockchain1.push_block(block1);

@@ -1,7 +1,6 @@
 #include <tinychain/tinychain.hpp>
 #include <tinychain/consensus.hpp>
 #include <tinychain/blockchain.hpp>
-#include <boost/date_time/posix_time/posix_time.hpp>
 
 namespace tinychain
 {
@@ -14,14 +13,26 @@ void miner::start() {
 
     auto&& prev_block = chain_.get_last_block();
 
+    // 填充新块
     new_block.header_.height = prev_block.header_.height + 1;
     new_block.header_.prev_hash = prev_block.header_.hash;
 
-    boost::posix_time::ptime epoch(boost::gregorian::date(1970, boost::gregorian::Jan, 1));
-    boost::posix_time::time_duration time_from_epoch = boost::posix_time::second_clock::universal_time() - epoch;
-    new_block.header_.timestamp = time_from_epoch.total_seconds();
+    new_block.header_.timestamp = get_now_timestamp();
 
+    new_block.header_.tx_count = pool.size();
 
+    // 难度调整
+    auto target = 0x0fffffffffffffff / prev_block.header_.difficulty;
+
+    new_block.header_.difficulty = (new_block.header_.timestamp - prev_block.header_.timestamp) / 6; // 6 seconds
+
+    // 设置区块体,pool已经被清空
+    new_block.setup(pool);
+
+    // 调用网络广播
+
+    // 本地存储
+    chain_.push_block(new_block);
 }
 
 bool validate_tx(blockchain& chain, const tx& new_tx) {
