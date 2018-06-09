@@ -108,6 +108,7 @@ public:
     };
 
 
+    block() {}
     block(uint64_t h) {header_.height = h;}
     block(const block& rb) {
         header_ = rb.header();

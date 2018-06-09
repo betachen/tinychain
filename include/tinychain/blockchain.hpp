@@ -19,8 +19,19 @@ public:
     blockchain& operator=(blockchain&&)  = default;
     blockchain& operator=(const blockchain&)  = default;
 
-    void print(){ std::cout<<"class blockchain"<<std::endl; }
+    void print(){
+        log::info("blockchain")<<"---begin---";
+        block b;
+        while(chain_.pop(b)) {
+            log::info("block")<<b.header().height;
+        }
+        log::info("blockchain")<<"---end---";
+    }
     void test();
+
+    void push_block(const block& new_block){
+        chain_.push_block(new_block);
+    }
 
     auto id() {return id_;}
 

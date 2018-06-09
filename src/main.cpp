@@ -19,6 +19,11 @@ int main(int argc, char* argv[])
     block block1(1);
     block block2(2);
     block block3(3);
+    blockchain blockchain1;
+    blockchain1.push_block(block1);
+    blockchain1.push_block(block2);
+    blockchain1.push_block(block3);
+    blockchain1.print();
 
 #if 0
     // bind

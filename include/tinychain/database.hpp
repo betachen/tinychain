@@ -39,8 +39,12 @@ public:
     void test();
 
     uint64_t height() { return chain_database_.count(); }
+
     void push_block(const block& new_block){
         chain_database_.push(new_block);
+    }
+    bool pop(block& front){
+        return chain_database_.pop(front);
     }
 
 private:
