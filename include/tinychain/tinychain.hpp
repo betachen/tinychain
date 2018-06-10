@@ -93,13 +93,13 @@ public:
     void print(){ std::cout<<"class tx"<<std::endl; }
     void test();
 
-    Json::Value item_to_json(input_item_t in) {
+    Json::Value item_to_json (input_item_t in) {
         Json::Value root;
         root["hash"] = in.first;
         root["index"] = in.second;
         return root;
     }
-    Json::Value item_to_json(output_item_t out) {
+    Json::Value item_to_json (output_item_t out) {
         Json::Value root;
         root["address"] = out.first;
         root["value"] = out.second;

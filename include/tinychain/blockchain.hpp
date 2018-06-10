@@ -46,8 +46,9 @@ public:
     memory_pool_t pool() { return pool_; }
     void pool_reset() { pool_.clear(); }
 
-    void collect(const tx& tx) {
+    void collect(tx& tx) {
         pool_.push_back(tx);
+        log::info("blockchain")<<"new tx:"<<tx.to_json().toStyledString();
     }
 
     void create_genesis_block();
@@ -58,10 +59,21 @@ public:
 
     Json::Value list_keys(){
         Json::Value root;
-
         for (const auto& each : key_pair_database_.list_keys()) {
                 root.append(each.to_json());
         }
+        return root;
+    }
+
+    Json::Value send(address_t addr, uint64_t amount){
+        Json::Value root;
+        tx target_tx{addr, amount};
+
+        //本地pool
+        collect(target_tx);
+        
+        //广播
+
         return root;
     }
 

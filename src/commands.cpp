@@ -16,6 +16,7 @@ bool commands::exec(Json::Value& out){
     } else if  (*(vargv_.begin()) == "getbalance") {
         out = "getbalance-ret-not-yet";
     } else if  (*(vargv_.begin()) == "startmining") {
+        //TODO
         if (vargv_.size() < 2) {
             std::string cmd;
             //node_.miner_run(cmd);
@@ -24,11 +25,7 @@ bool commands::exec(Json::Value& out){
         //node_->miner_run(vargv_[1]);
         out["result"] = "start mining on address" + vargv_[1];
     } else {
-        out = "<getnewkey> \
-            <listkeys>     \
-            <listbalance> \ 
-            <send> \ 
-            <startmining>";
+        out = "<getnewkey>  <listkeys>  <getbalance>  <send>  <startmining>";
         return false;
     }
 
