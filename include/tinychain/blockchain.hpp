@@ -1,7 +1,8 @@
 #pragma once
+#include <queue>
 #include <tinychain/tinychain.hpp>
 #include <tinychain/database.hpp>
-#include <queue>
+#include <tinychain/network.hpp>
 
 namespace tinychain
 {
@@ -48,7 +49,7 @@ public:
 
     void collect(tx& tx) {
         pool_.push_back(tx);
-        log::info("blockchain")<<"new tx:"<<tx.to_json().toStyledString();
+        log::info("blockchain-pool")<<"new tx:"<<tx.to_json().toStyledString();
     }
 
     void create_genesis_block();
@@ -73,6 +74,7 @@ public:
         collect(target_tx);
         
         //广播
+        //ws_send(target_tx.to_json().toStyledString());
 
         return root;
     }

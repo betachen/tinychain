@@ -12,12 +12,19 @@ bool commands::exec(Json::Value& out){
     } else if  (*(vargv_.begin()) == "listkeys") {
         out = node_.chain().list_keys();
     } else if  (*(vargv_.begin()) == "send") {
-        out = "send-ret-not-yet";
+        if (vargv_.size() >= 3) {
+            uint64_t amount = std::stoul(vargv_[2]);
+            auto ret = node_.chain().send(vargv_[1], amount);
+            out = ret.toStyledString();
+        } else {
+            out = "incorrect send paramas";
+        }
+
     } else if  (*(vargv_.begin()) == "getbalance") {
         out = "getbalance-ret-not-yet";
     } else if  (*(vargv_.begin()) == "startmining") {
         std::string addr;
-        if (vargv_.size() > 2) {
+        if (vargv_.size() >= 2) {
             addr = vargv_[1];
             node_.miner_run(addr);
             out["result"] = "start mining on address" + addr;

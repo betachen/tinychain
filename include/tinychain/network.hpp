@@ -4,6 +4,8 @@
 namespace tinychain
 {
 
+void ws_send(std::string&& msg);
+
 class network
 {
 public:
@@ -15,6 +17,7 @@ public:
 
     void print(){ std::cout<<"class network"<<std::endl; }
     void test();
+
 
 private:
 };

@@ -2,6 +2,7 @@
 #include <tinychain/tinychain.hpp>
 #include <tinychain/consensus.hpp>
 #include <tinychain/blockchain.hpp>
+#include <tinychain/network.hpp>
 
 namespace tinychain
 {
@@ -9,7 +10,6 @@ namespace tinychain
 void miner::start(address_t& addr){
     for(;;) {
         block new_block;
-
 
         // 未找到，继续找
         if (!pow_once(new_block, addr)) {
@@ -20,6 +20,7 @@ void miner::start(address_t& addr){
         chain_.pool_reset();
 
         // 调用网络广播
+        //ws_send(new_block.to_json().toStyledString());
 
         // 本地存储
         chain_.push_block(new_block);
