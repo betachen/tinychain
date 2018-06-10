@@ -16,8 +16,8 @@ void miner::start(address_t& addr){
             continue;
         }
 
-        // pool已经被清空
-        chain_.pool_reset();
+        // 需要在pool中移除已经被打包的交易
+        chain_.pool_reset(new_block.header_.tx_count);
 
         // 调用网络广播
         //ws_send(new_block.to_json().toStyledString());
@@ -75,11 +75,10 @@ bool miner::pow_once(block& new_block, address_t& addr) {
 
         // 找到了
         if (ncan < target) {
-            //log::info("consensus") << "target:" << ncan;
-            //log::info("consensus") << "hash  :" << to_sha256(jv_block);
             new_block.header_.hash = can;
+            //log::info("consensus") << "target:" << ncan;
+            //log::info("consensus") << "new block :" << can;
             log::info("consensus") << "new block :" << jv_block.toStyledString();
-            log::info("consensus") << "new block :" << can;
             return true;
         }
     }

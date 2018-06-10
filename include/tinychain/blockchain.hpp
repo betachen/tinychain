@@ -45,7 +45,11 @@ public:
     auto id() {return id_;}
 
     memory_pool_t pool() { return pool_; }
-    void pool_reset() { pool_.clear(); }
+    void pool_reset(size_t times) { 
+        //TO FIX, dirty impl
+        while(times--)
+            pool_.erase(pool_.begin());
+    }
 
     void collect(tx& tx) {
         pool_.push_back(tx);
