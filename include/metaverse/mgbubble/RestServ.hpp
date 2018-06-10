@@ -1,10 +1,11 @@
 #pragma once
 #include <list>
+#include <tinychain/tinychain.hpp>
+#include <tinychain/node.hpp>
 #include <metaverse/mgbubble/Mongoose.hpp>
 #include <metaverse/mgbubble/utility/Stream_buf.hpp>
 #include <metaverse/mgbubble/utility/Tokeniser.hpp>
 #include <metaverse/mgbubble/exception/Instances.hpp>
-#include <tinychain/blockchain.hpp>
 
 
 namespace mgbubble{
@@ -13,13 +14,18 @@ namespace mgbubble{
 class RestServ : public Mgr<RestServ>
 {
 public:
-    explicit RestServ(const char* webroot, tinychain::blockchain& rb):chain_(rb)
+    explicit RestServ(const char* webroot, tinychain::node& node):node_(node)
     {
         memset(&httpoptions_, 0x00, sizeof(httpoptions_));
         document_root_ = webroot;	
         httpoptions_.document_root = document_root_.c_str();
     }
     ~RestServ() noexcept {};
+
+    void run() {
+        for (;;)
+            this->poll(1000);
+    }
 
     // Copy.
     RestServ(const RestServ& rhs) = delete;
@@ -95,7 +101,7 @@ private:
     //const char* const servername_{"Http-Metaverse"};
     std::string document_root_;
 
-    tinychain::blockchain& chain_;
+    tinychain::node& node_;
 };
 
 } // mgbubble

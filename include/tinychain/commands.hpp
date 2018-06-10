@@ -10,7 +10,7 @@ class commands
 {
 public:
     typedef std::vector<std::string> vargv_t;
-    commands(const vargv_t& vargv, blockchain& chain):vargv_(vargv), chain_(chain) {
+    commands(const vargv_t& vargv, node& node):vargv_(vargv), node_(node) {
     }
 
     commands(const commands&)  = default;
@@ -24,7 +24,7 @@ public:
 
 private:
     const vargv_t& vargv_;
-    blockchain& chain_;
+    node& node_;
 };
 
 

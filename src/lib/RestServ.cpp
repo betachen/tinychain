@@ -81,7 +81,7 @@ void RestServ::websocketSend(mg_connection& nc, WebsocketMessage ws)
     std::stringstream sout;
     try{
         ws.data_to_arg();
-        tinychain::commands cmd{ws.vargv(), chain_};
+        tinychain::commands cmd{ws.vargv(), node_};
         Json::Value ret;
         cmd.exec(ret);
 
@@ -109,7 +109,7 @@ void RestServ::httpRpcRequest(mg_connection& nc, HttpMessage data)
 
         //process here
         data.data_to_arg();
-        tinychain::commands cmd{data.vargv(), chain_};
+        tinychain::commands cmd{data.vargv(), node_};
         Json::Value ret;
         cmd.exec(ret);
 

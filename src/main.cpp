@@ -1,7 +1,9 @@
 #include <tinychain/tinychain.hpp>
 #include <tinychain/node.hpp>
+#include <metaverse/mgbubble.hpp>
 
 using namespace tinychain;
+using namespace mgbubble;
 
 // global logger
 Logger logger;
@@ -42,8 +44,15 @@ int main(int argc, char* argv[])
     blockchain1.print();
 #endif
 
+    // server setup
     node my_node;
-    my_node.run();
+    mgbubble::RestServ Server{"webroot", my_node};
+    auto& conn = Server.bind("0.0.0.0:8000");
+    mg_set_protocol_http_websocket(&conn);
+    mg_set_timer(&conn, mg_time() + mgbubble::RestServ::session_check_interval);
+
+    log::info("main")<<"httpserver started";
+    Server.run();
 
     return 0;
 }
