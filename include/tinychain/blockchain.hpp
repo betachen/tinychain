@@ -52,10 +52,24 @@ public:
 
     void create_genesis_block();
 
+    key_pair get_new_key_pair(){
+        return key_pair_database_.get_new_key_pair();
+    }
+
+    Json::Value list_keys(){
+        Json::Value root;
+
+        for (const auto& each : key_pair_database_.list_keys()) {
+                root.append(each.to_json());
+        }
+        return root;
+    }
+
 private:
     uint16_t id_;
     block genesis_block_;
     chain_database chain_; 
+    key_pair_database key_pair_database_;
     memory_pool_t pool_;
 };
 

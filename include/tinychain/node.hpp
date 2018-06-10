@@ -40,7 +40,7 @@ public:
         // miner
         address_t miner_addr;
         if (address.empty()){
-            miner_addr = key_pair_database_.get_new_key_pair().address();
+            miner_addr = blockchain_.get_new_key_pair().address();
         } else {
             miner_addr = address;
         }
@@ -54,7 +54,6 @@ private:
     blockchain blockchain_;
     mgbubble::RestServ rest_server_{"webroot", blockchain_};
     miner miner_{blockchain_};
-    key_pair_database key_pair_database_;
 };
 
 

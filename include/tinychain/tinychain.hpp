@@ -52,7 +52,7 @@ public:
     sha256_t public_key() const { return public_key_; }
     uint64_t private_key() const { return private_key_; }
 
-    Json::Value to_json() {
+    Json::Value to_json() const {
         Json::Value root;
         root["address"] = address();
         root["public_key"] = public_key_;

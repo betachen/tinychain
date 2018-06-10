@@ -7,12 +7,14 @@ namespace tinychain
 
 bool commands::exec(Json::Value& out){
     if (*(vargv_.begin()) == "getnewkey") {
-        //auto&& key = node_->get_new_key_pair();
-        //out = key.to_json();
+        auto&& key = chain_.get_new_key_pair();
+        out = key.to_json();
+    } else if  (*(vargv_.begin()) == "listkeys") {
+        out = chain_.list_keys();
     } else if  (*(vargv_.begin()) == "send") {
-        out = "send-ret";
+        out = "send-ret-not-yet";
     } else if  (*(vargv_.begin()) == "getbalance") {
-        out = "getbalance-ret";
+        out = "getbalance-ret-not-yet";
     } else if  (*(vargv_.begin()) == "startmining") {
         if (vargv_.size() < 2) {
             std::string cmd;
@@ -22,7 +24,11 @@ bool commands::exec(Json::Value& out){
         //node_->miner_run(vargv_[1]);
         out["result"] = "start mining on address" + vargv_[1];
     } else {
-        out = "help info";
+        out = "<getnewkey> \
+            <listkeys>     \
+            <listbalance> \ 
+            <send> \ 
+            <startmining>";
         return false;
     }
 

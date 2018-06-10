@@ -103,6 +103,10 @@ public:
         return key;
     }
 
+    const key_pair_database_t& list_keys() const {
+        return key_pair_database_;
+    }
+
 private:
     key_pair_database_t key_pair_database_;
 };
