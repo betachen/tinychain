@@ -1,4 +1,5 @@
 #pragma once
+#include <algorithm>
 #include <tinychain/tinychain.hpp>
 #include <metaverse/mgbubble/utility/Queue.hpp>
 
@@ -60,7 +61,7 @@ public:
     bool get_tx (const sha256_t tx_hash, tx& t) {
         auto iter = std::find_if(queue_.begin(), queue_.end(), [&tx_hash, &t](const block& b){
                 auto&& tl = b.tx_list();
-                auto iter2 = std::find_if(tl.begin(), tl.end(), [&tx_hash, &t](const tx& t){
+                auto iter2 = std::find_if(tl.begin(), tl.end(), [&tx_hash](const tx& t){
                 return t.hash() == tx_hash;
                 });
                 if (iter2 == tl.end()) { 
