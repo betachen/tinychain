@@ -53,7 +53,10 @@ bool miner::pow_once(block& new_block, address_t& addr) {
     if (time_peroid <= 10u) {
         new_block.header_.difficulty = prev_block.header_.difficulty + 9000;
     } else {
-        new_block.header_.difficulty = prev_block.header_.difficulty - 3000;
+        if (prev_block.header_.difficulty <= 3000)
+            new_block.header_.difficulty = prev_block.header_.difficulty + 9000;
+        else
+            new_block.header_.difficulty = prev_block.header_.difficulty - 3000;
     }
     // 计算挖矿目标值,最大值除以难度就目标值
     uint64_t target = 0xffffffffffffffff / prev_block.header_.difficulty;
