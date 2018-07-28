@@ -23,3 +23,10 @@ $ cd build/bin
 $ mkdir -p webroot && cp -f ../../etc/index.html webroot
 $ ./tinychain
 ```
+
+## 开发路径（TODO-LIST）
+1. 基础代码
+1. PoW 挖矿代码
+1. P2P网络
+1. 加密与账户模型
+1. 共识可替换
