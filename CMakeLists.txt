@@ -32,7 +32,7 @@ IF("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
   SET(CMAKE_CXX_FLAGS "-std=c++14 ${COMMON_ARGS} -fno-enforce-eh-specs -fnothrow-opt -Wno-reorder -Wno-ignored-qualifiers -Wno-unused-function")
 ELSEIF("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
   SET(CMAKE_C_FLAGS "-std=c11 ${COMMON_ARGS}")
-  SET(CMAKE_CXX_FLAGS "-std=c++14 ${COMMON_ARGS} -Wno-reorder")
+  SET(CMAKE_CXX_FLAGS "-std=c++14 ${COMMON_ARGS} -Wno-reorder -Wno-unused-function -Wno-unused-command-line-argument")
 ENDIF()
 SET(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -fPIC")
 
