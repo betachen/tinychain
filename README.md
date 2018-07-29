@@ -7,6 +7,7 @@ A mini blockchain implementation in C++14
 * boost 1.56+ (datetime)
 * cmake
 * git
+* sqlite3 (apt-get install libsqlite3-dev / brew install sqlite3)
 
 ## build
 On workpath of tinychain:

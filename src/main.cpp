@@ -11,7 +11,57 @@ Logger logger;
 int main(int argc, char* argv[])
 {
 
+    database d;
+    d.init();
+    d.print();
+
+#if 0
     log::info("main")<<"started";
+    try {
+        sqlite3pp::database db("test.db");
+        sqlite3pp::database db2("test.db");
+        {
+          sqlite3pp::command cmd(db, "create table if not EXISTS block ( \
+      number bigint primary KEY , \
+      hash char(64) not null, \
+      bits bigint, \
+      transaction_count INTEGER , \
+      mixhash  VARCHAR (128), \
+      version char(8) , \
+      merkle_tree_hash char(64), \
+      previous_block_hash CHAR (64), \
+      nonce varchar(128) , \
+      time_stamp bigint);");
+          std::cout << cmd.execute() << std::endl;
+          //sqlite3pp::transaction xct(db);
+          {
+              sqlite3pp::command cmd(db, "INSERT INTO block(number, hash, bits) VALUES ('0','AAAA', '1234')");
+              sqlite3pp::command cmd1(db, "INSERT INTO block(number, hash, bits) VALUES ('1','AAAB', '1235')");
+              sqlite3pp::command cmd2(db2, "INSERT INTO block(number, hash, bits) VALUES ('2','AAAC', '1236')");
+              sqlite3pp::command cmd3(db, "INSERT INTO block(number, hash, bits) VALUES ('3','AAAD', '1237')");
+              sqlite3pp::command cmd4(db2, "INSERT INTO block(number, hash, bits) VALUES ('4','AAAE', '1238')");
+              std::cout <<"cmd:"<< cmd.execute() << std::endl;
+              std::cout <<"cmd1:"<< cmd1.execute() << std::endl;
+              std::cout <<"cmd2:"<< cmd2.execute() << std::endl;
+              std::cout <<"cmd3:"<< cmd3.execute() << std::endl;
+              std::cout <<"cmd4:"<< cmd4.execute() << std::endl;
+          }
+        }
+        sqlite3pp::query qry(db2, "SELECT number, hash, bits FROM block");
+            std::cout << "column:"<< qry.column_count()<<std::endl;
+        for (sqlite3pp::query::iterator i = qry.begin(); i != qry.end(); ++i) {
+	        int id;
+	        char const* name, *phone;
+	        std::tie(id, name, phone) = (*i).get_columns<int, char const*, char const*>(0, 1, 2);
+            std::cout << id << "\t" << name << "\t" << phone << std::endl;
+         }
+        std::cout << "disconnect db:"<<db.disconnect() << std::endl;
+
+    } catch (std::exception& ex) {
+           std::cout << ex.what() << std::endl;
+    }
+    return  0;
+#endif
 
     //std::string input = "grape";
     //auto&& output1 = sha256(input);

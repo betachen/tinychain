@@ -1,7 +1,8 @@
 #pragma once
 #include <algorithm>
 #include <tinychain/tinychain.hpp>
-#include <metaverse/mgbubble/utility/Queue.hpp>
+#include <sqlite3pp/sqlite3pp.h>
+//#include <sqlite3pp/sqlite3ppext.h>
 
 namespace tinychain
 {
@@ -15,20 +16,16 @@ public:
     database& operator=(database&&)  = default;
     database& operator=(const database&)  = default;
 
-    virtual void print(){ std::cout<<"class database"<<std::endl; }
-    virtual void test();
-
-    virtual bool flush() = 0;
+    virtual void print();
+    void init();
 
 protected:
-
+    const char* db_name_ = "tinychain.db";
 };
 
-class chain_database: public Queue<block>
+class chain_database: public database
 {
 public:
-    // thread safty
-    typedef Queue<block> chain_database_t;
     
     chain_database()  {};
     chain_database(const chain_database&)  = default;
@@ -37,57 +34,37 @@ public:
     chain_database& operator=(const chain_database&)  = default;
 
     void print(){
-        for (auto& each : queue_ ) {
-            log::info("block")<<each.to_string();
-        };
+        //for (auto& each : queue_ ) {
+        //    log::info("block")<<each.to_string();
+        //};
     }
     void test();
 
-    uint64_t height() { return count(); }
+    uint64_t height() { return 11u; }
 
-    auto get_last_block() { return queue_.rbegin(); }
+    auto get_last_block() { return true; }
 
     bool get_block (const sha256_t block_hash, block& b) {
-        auto iter = std::find_if(queue_.begin(), queue_.end(), [&block_hash](const block& b){
-                return b.hash() == block_hash;
-                });
-        if (iter == queue_.end()) {
-            return false;
-        }
-        b = *iter;
         return true;
     }
 
     bool get_tx (const sha256_t tx_hash, tx& t) {
-        auto iter = std::find_if(queue_.begin(), queue_.end(), [&tx_hash, &t](const block& b){
-                auto&& tl = b.tx_list();
-                auto iter2 = std::find_if(tl.begin(), tl.end(), [&tx_hash](const tx& t){
-                return t.hash() == tx_hash;
-                });
-                if (iter2 == tl.end()) { 
-                    return false;
-                } else {
-                    t = *iter2;
-                    return true;
-                }
-
-                });
-        if (iter == queue_.end()) {
-            return false;
-        }
         return true;
     }
 
+    virtual ~chain_database(){
+        db_conn_.disconnect();
+    }
 
 private:
-//    chain_database_t chain_database_;
+    sqlite3pp::database db_conn_{db_name_};
 };
 
 // 相当于是本地钱包的私钥管理
-class key_pair_database
+class key_pair_database:public database
 {
 public:
-    typedef std::vector<key_pair> key_pair_database_t;
+    typedef std::vector<key_pair> key_pair_list_t;
 
     key_pair_database()  {};
     key_pair_database(const key_pair_database&)  = default;
@@ -98,18 +75,12 @@ public:
     void print(){ std::cout<<"class key_pair_database"<<std::endl; }
     void test();
 
-    key_pair get_new_key_pair() {
-        key_pair key;
-        key_pair_database_.push_back(key);
-        return key;
-    }
+    key_pair get_new_key_pair();
 
-    const key_pair_database_t& list_keys() const {
-        return key_pair_database_;
-    }
+    bool list_keys(key_pair_list_t& key_list);
 
 private:
-    key_pair_database_t key_pair_database_;
+    sqlite3pp::database db_conn_{db_name_};
 };
 
 }// tinychain

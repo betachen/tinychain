@@ -21,7 +21,7 @@ ENDIF()
 STRING(TOUPPER "${CMAKE_BUILD_TYPE}" CMAKE_BUILD_TYPE)
 
 # ----------------- common Definitions ------
-SET(COMMON_WARN "-Wall -Werror -Wstrict-aliasing=2 -Wno-unused-parameter -Wno-unused-variable -Wno-type-limits -Wno-deprecated-register")
+SET(COMMON_WARN "-Wall -Werror -Wstrict-aliasing=2 -Wno-unused-parameter -Wno-unused-variable -Wno-type-limits -Wno-deprecated-register -Wno-deprecated-declarations")
 SET(COMMON_FLAGS "-fstrict-aliasing -fvisibility=hidden")
 SET(COMMON_LIBS "-pthread")
 SET(COMMON_ARGS "${COMMON_FLAGS} ${COMMON_WARN} ${COMMON_LIBS}")

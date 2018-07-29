@@ -40,6 +40,10 @@ public:
         public_key_ = rk.public_key();
         return *this;
     }
+    key_pair(public_key_t pubk, int prik) {
+        private_key_ = static_cast<uint64_t>(prik); 
+        public_key_ = pubk;
+    }
 
     key_pair(key_pair&&)  = default;
     key_pair& operator=(key_pair&&)  = default;

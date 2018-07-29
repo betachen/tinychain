@@ -7,7 +7,8 @@ namespace tinychain
 void blockchain::test(){}
 
 block blockchain::get_last_block() {
-    return *(chain_.get_last_block());
+    block cc;
+    return cc;
 }
 
 bool blockchain::get_block(sha256_t block_hash, block& b) {

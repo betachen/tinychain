@@ -29,7 +29,7 @@ public:
     void test();
 
     void push_block(const block& new_block){
-        chain_.push(new_block);
+        //chain_.push(new_block);
     }
 
     uint64_t height() { return chain_.height(); }
@@ -64,7 +64,10 @@ public:
 
     Json::Value list_keys(){
         Json::Value root;
-        for (const auto& each : key_pair_database_.list_keys()) {
+        key_pair_database::key_pair_list_t key_list;
+        key_pair_database_.list_keys(key_list);
+
+        for (const auto& each : key_list) {
                 root.append(each.to_json());
         }
         return root;
