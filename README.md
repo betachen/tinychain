@@ -12,7 +12,7 @@ A mini blockchain implementation in C++14
 ## build
 On workpath of tinychain:
 ```
-$ mkdir build
+$ mkdir -p build && cd build
 $ cmake ..
 $ make
 ```
