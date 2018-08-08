@@ -13,8 +13,8 @@ A mini blockchain implementation in C++14
 On workpath of tinychain:
 ```
 $ mkdir build
-$ cmake ..
-$ make
+$ cd build && cmake ..
+$ make -j2
 ```
 
 ## run
@@ -30,4 +30,5 @@ $ ./tinychain
 1. PoW 挖矿代码
 1. P2P网络
 1. 加密与账户模型
-1. 共识可替换
+1. 命令行与展示
+1. 共识可替换为PoS/DPoS etc
