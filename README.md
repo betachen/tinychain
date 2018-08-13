@@ -32,3 +32,10 @@ $ ./tinychain
 1. 加密与账户模型
 1. 命令行与展示
 1. 共识可替换为PoS/DPoS etc
+
+## 仓库介绍
+cli-tinychain文件夹：命令行
+contrib文件夹：json与mongoose工具
+etc文件夹：tinychain演示网页等
+include文件夹：tinychain中类的设计以及第三方库的头文件
+src文件夹：tinychain和第三方库的具体实现
