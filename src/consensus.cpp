@@ -1,4 +1,4 @@
-#include <algorithm>
+﻿#include <algorithm>
 #include <tinychain/tinychain.hpp>
 #include <tinychain/consensus.hpp>
 #include <tinychain/blockchain.hpp>

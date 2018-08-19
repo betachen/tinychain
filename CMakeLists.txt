@@ -21,10 +21,12 @@ ENDIF()
 STRING(TOUPPER "${CMAKE_BUILD_TYPE}" CMAKE_BUILD_TYPE)
 
 # ----------------- common Definitions ------
-SET(COMMON_WARN "-Wall -Werror -Wstrict-aliasing=2 -Wno-unused-parameter -Wno-unused-variable -Wno-type-limits -Wno-deprecated-register -Wno-deprecated-declarations")
-SET(COMMON_FLAGS "-fstrict-aliasing -fvisibility=hidden")
-SET(COMMON_LIBS "-pthread")
-SET(COMMON_ARGS "${COMMON_FLAGS} ${COMMON_WARN} ${COMMON_LIBS}")
+IF(NOT WIN32)
+  SET(COMMON_WARN "-Wall -Werror -Wstrict-aliasing=2 -Wno-unused-parameter -Wno-unused-variable -Wno-type-limits -Wno-deprecated-register -Wno-deprecated-declarations")
+  SET(COMMON_FLAGS "-fstrict-aliasing -fvisibility=hidden")
+  SET(COMMON_LIBS "-pthread")
+  SET(COMMON_ARGS "${COMMON_FLAGS} ${COMMON_WARN} ${COMMON_LIBS}")
+ENDIF()
 
 # --------------- Compiler ------------------
 IF("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
@@ -69,6 +71,15 @@ IF(ENABLE_SHARED_LIBS)
 ELSE()
   SET(mongoose_LIBRARY mongoose_static)
   SET(jsoncpp_LIBRARY jsoncpp_static)
+ENDIF()
+
+IF(WIN32)
+  INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/contrib/sqlite")
+  IF(ENABLE_SHARED_LIBS)
+    SET(sqlite_LIBRARY sqlite_shared)
+  ELSE()
+    SET(sqlite_LIBRARY sqlite_static)
+  ENDIF()
 ENDIF()
 
 ENABLE_TESTING()

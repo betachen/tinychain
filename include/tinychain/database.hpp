@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include <algorithm>
 #include <tinychain/tinychain.hpp>
 #include <sqlite3pp/sqlite3pp.h>

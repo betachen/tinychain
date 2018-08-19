@@ -1,6 +1,8 @@
 FILE(GLOB_RECURSE jsoncpp_SOURCES "*.cpp")
 
-SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-deprecated-declarations")
+IF(NOT WIN32)
+  SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-deprecated-declarations")
+ENDIF()
 
 ADD_LIBRARY(jsoncpp_static STATIC ${jsoncpp_SOURCES})
 SET_TARGET_PROPERTIES(jsoncpp_static PROPERTIES OUTPUT_NAME jsoncpp)

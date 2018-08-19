@@ -17,12 +17,28 @@ $ cmake ..
 $ make
 ```
 
+Specifically, build on Windows (example):
+```
+> mkdir build
+> cd build
+> cmake .. -G "Visual Studio 15 2017 Win64" -DBOOST_ROOT=/local/boost_1_67_0
+```
+Open tinychain.sln under build subfolder with Visual Studio to compile.
+
 ## run
 On workpath of tinychain:
 ```
 $ cd build/bin
 $ mkdir -p webroot && cp -f ../../etc/index.html webroot
 $ ./tinychain
+```
+
+Specifically, run on Windows (example):
+```
+> cd build\bin\Release
+> mkdir webroot
+> copy /Y ..\..\..\etc\index.html webroot
+> tinychain.exe
 ```
 
 ## 开发路径（TODO-LIST）

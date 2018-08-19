@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include <tinychain/tinychain.hpp>
 #include <tinychain/blockchain.hpp>
 
