@@ -7,7 +7,7 @@ IF(WIN32)
 ELSEIF(ENABLE_SHARED_LIBS)
     TARGET_LINK_LIBRARIES(tinychain ${Boost_LIBRARIES} ${jsoncpp_LIBRARY} ${mongoose_LIBRARY} sqlite3)
 ELSE()
-    TARGET_LINK_LIBRARIES(tinychain ${Boost_LIBRARIES} ${jsoncpp_LIBRARY} ${mongoose_LIBRARY} libsqlite3.a)
+    TARGET_LINK_LIBRARIES(tinychain ${Boost_LIBRARIES} ${jsoncpp_LIBRARY} ${mongoose_LIBRARY} sqlite3 dl)
 ENDIF()
 
 INSTALL(TARGETS tinychain DESTINATION bin)
