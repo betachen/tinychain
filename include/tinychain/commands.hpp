@@ -1,3 +1,8 @@
+/**
+ * Part of:
+ * Comments:
+ *
+**/
 #pragma once
 #include <jsoncpp/json/json.h>
 #include <tinychain/tinychain.hpp>

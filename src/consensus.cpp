@@ -1,3 +1,8 @@
+/**
+ * Part of:
+ * Comments:
+ *
+**/
 ﻿#include <algorithm>
 #include <tinychain/tinychain.hpp>
 #include <tinychain/consensus.hpp>

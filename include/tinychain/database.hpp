@@ -1,3 +1,8 @@
+/**
+ * Part of:
+ * Comments:
+ *
+**/
 ﻿#pragma once
 #include <algorithm>
 #include <tinychain/tinychain.hpp>

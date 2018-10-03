@@ -1,3 +1,8 @@
+/**
+ * Part of:
+ * Comments:
+ *
+**/
 #include <tinychain/tinychain.hpp>
 #include <tinychain/node.hpp>
 #include <metaverse/mgbubble.hpp> 

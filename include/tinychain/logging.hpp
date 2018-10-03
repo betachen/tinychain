@@ -1,4 +1,9 @@
 /**
+ * Part of:
+ * Comments:
+ *
+**/
+/**
  * Copyright (c) 2011-2015 libbitcoin developers (see AUTHORS)
  * Copyright (c) 2016-2018 metaverse core developers (see MVS-AUTHORS)
  *
