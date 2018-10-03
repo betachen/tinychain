@@ -3,7 +3,7 @@
  * Comments:
  *
 **/
-﻿#pragma once
+#pragma once
 
 #include <tinychain/logging.hpp>
 #include <jsoncpp/json/json.h>
