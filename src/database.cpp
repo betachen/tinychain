@@ -46,8 +46,8 @@ void database::init(){
         cmd.execute();
 
         sqlite3pp::command cmd2(db_conn, "create table if not EXISTS key_pairs( \
-          private_key char(64) primary key, \
-          public_key char(64) not null, \
+          address char(64) primary key, \
+          private_key BLOB NOT NULL, \
           account TEXT NOT NULL DEFAULT 'default');");
         cmd2.execute();
 
@@ -58,23 +58,27 @@ void database::init(){
     db_conn.disconnect();
 }
 
+//使用CryptoPP的RSA库生成新的密钥对
 key_pair key_pair_database::get_new_key_pair() {
     key_pair key;
     log::info("database")<<"getnewkey address:"<< key.address();
     sqlite3pp::transaction xct(db_conn_);
-    sqlite3pp::command cmd(db_conn_, "INSERT INTO key_pairs (public_key, private_key) VALUES (?, ?)");
-    //TODO change pub pri key algorithm
-    cmd.binder() << key.public_key().c_str()<<std::to_string(key.private_key()).c_str();
+    sqlite3pp::command cmd(db_conn_, "INSERT INTO key_pairs (address, private_key) VALUES (?, ?)");
+    auto&& keypair = key.encode_pair();
+    cmd.binder() << key.address() << keypair.first;
     cmd.execute();
     xct.commit();
     return key;
 }
 
-bool key_pair_database::list_keys(key_pair_list_t& key_list) {
-    sqlite3pp::query qry(db_conn_, "SELECT public_key, private_key FROM key_pairs");
+// 从数据库中读取数据
+bool key_pair_database::list_keys(Json::Value& root) {
+    sqlite3pp::query qry(db_conn_, "SELECT private_key FROM key_pairs");
 
     for (sqlite3pp::query::iterator i = qry.begin(); i != qry.end(); ++i) {
-        key_list.push_back(key_pair((*i).get<char const*>(0), (*i).get<int>(1)));
+        std::string private_key{(*i).get<char const*>(0)};
+        key_pair each(private_key);
+        root.append(each.to_json());
     }
     return true;
 }

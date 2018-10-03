@@ -1,11 +1,20 @@
 ﻿#pragma once
+
 #include <tinychain/logging.hpp>
 #include <jsoncpp/json/json.h>
 #include <tinychain/sha256.hpp>
+
 #include <string>
 #include <array>
 #include <random>
 #include <sstream>
+
+// Digital Signatue Algorithm
+#include <cryptopp/rsa.h> 
+#include <cryptopp/base64.h>
+#include <cryptopp/osrng.h>
+#include <cryptopp/pssr.h>
+#include <cryptopp/whrlpool.h>
 
 namespace tinychain
 {
@@ -14,66 +23,96 @@ namespace tc = tinychain;
 
 // ---------------------------- typedef ----------------------------
 typedef std::string sha256_t;
-typedef sha256_t public_key_t;
 typedef std::string address_t;
+typedef CryptoPP::RSA::PublicKey public_key_t;
+typedef CryptoPP::RSA::PrivateKey private_key_t;
 
 // ---------------------------- ulitity ----------------------------
-sha256_t to_sha256(Json::Value jv);
 uint64_t get_now_timestamp();
-uint64_t pseudo_random();
+sha256_t to_sha256(Json::Value jv);
+address_t key_to_address(const public_key_t& public_key);
+address_t key_to_address(const private_key_t& private_key);
 
 // ---------------------------- class ----------------------------
 class key_pair
 {
-public:
 
+public:
+	// new key pair
     key_pair()  { 
-        private_key_ = pseudo_random(); 
-        public_key_ = sha256(std::to_string(private_key_));
+        private_key_.GenerateRandomWithKeySize(rng, 1024);
     }
+	// Copy
     key_pair(const key_pair& rk)  {
         private_key_ = rk.private_key(); 
-        public_key_ = rk.public_key();
     }
+	// =
     key_pair& operator=(const key_pair& rk) {
         private_key_ = rk.private_key(); 
-        public_key_ = rk.public_key();
         return *this;
     }
-    key_pair(public_key_t pubk, int prik) {
-        private_key_ = static_cast<uint64_t>(prik); 
-        public_key_ = pubk;
+
+    // 从base64直接构造RSA私钥
+    key_pair(std::string& encoded_prik) {
+
+        log::debug("key_pair-in")<<encoded_prik;
+	    // decode base64 into private key
+        CryptoPP::StringSource prik_ss(encoded_prik, true, new CryptoPP::Base64Decoder());
+        private_key_.BERDecode(prik_ss); 
+        log::debug("key_pair-out")<<to_json();
     }
 
-    key_pair(key_pair&&)  = default;
+    // TODO
+    key_pair(key_pair&&) = default;
     key_pair& operator=(key_pair&&)  = default;
 
-    void print(){log::info("key_pair")<<"pub:["<<public_key_<<"] pri:["<<private_key_<<"]";}
+    void print(){log::info("key_pair")<<to_json();}
     void test();
 
-    // address 1 开头，截取0~31位公钥
-    address_t address() const { return ("1" + public_key_.substr(0, 30)); }
-    sha256_t public_key() const { return public_key_; }
-    uint64_t private_key() const { return private_key_; }
+    address_t address() const { 
+	    return key_to_address(private_key_);
+	}
+
+    private_key_t private_key() const { return private_key_; }
+
+    auto encode_pair() const { 
+        // get public key
+        public_key_t public_key(private_key_);
+
+        // encode with base64
+        std::string encoded_prik, encoded_pubk;
+        CryptoPP::Base64Encoder prik_slink(new CryptoPP::StringSink(encoded_prik), false);//false for no '\n'
+        CryptoPP::Base64Encoder pubk_slink(new CryptoPP::StringSink(encoded_pubk), false);
+        private_key_.DEREncode(prik_slink); 
+        public_key.DEREncode(pubk_slink);
+        prik_slink.MessageEnd();//base64 编码补足=
+        pubk_slink.MessageEnd();
+        //log::debug("key_pair-0")<<encoded_prik;
+
+        return std::make_pair(encoded_prik, encoded_pubk);
+    }
 
     Json::Value to_json() const {
         Json::Value root;
+        auto&& keypair = encode_pair();
         root["address"] = address();
-        root["public_key"] = public_key_;
-        root["private_key"] = private_key_;
+        root["public_key"] = keypair.second;
+        root["private_key"] = keypair.first;
         return root;
     }
 
+public:
+    CryptoPP::AutoSeededRandomPool rng;
+
 private:
-    uint64_t private_key_;
-    sha256_t public_key_;
+    private_key_t private_key_;
 };
 
 class tx
 {
 public:
     typedef std::pair<sha256_t, uint8_t> input_item_t;
-    typedef std::pair<public_key_t, uint64_t> output_item_t;
+    typedef std::pair<address_t, uint64_t> output_item_t;
 
     typedef std::vector<input_item_t> input_t;
     typedef std::vector<output_item_t> output_t;

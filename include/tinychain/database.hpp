@@ -77,7 +77,7 @@ public:
 
     key_pair get_new_key_pair();
 
-    bool list_keys(key_pair_list_t& key_list);
+    bool list_keys(Json::Value& root);
 
 private:
     sqlite3pp::database db_conn_{db_name_};

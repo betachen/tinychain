@@ -1,6 +1,16 @@
 # tinychain
 A mini blockchain implementation in C++14
+
 构建迷你区块链——《深入浅出区块链》
+
+## 简要说明 Smmary
+tinychain是一个业余的项目，旨在为大家提供微型的简单易懂的供学习的代码。
+以下是涉及的一些基础技术：
+* 加密库 - RSA
+* 本地持久化存储 - sqlite3
+* P2P网络 - 暂定gossip
+* 网络文本协议 - JSON-RPC
+* HTTP Server - mongoose
 
 ## toolchain
 * gcc/clang support C++14
@@ -8,6 +18,7 @@ A mini blockchain implementation in C++14
 * cmake
 * git
 * sqlite3 (apt-get install libsqlite3-dev / brew install sqlite3)
+* cryptopp (apt-get install libcryptopp-dev / brew install cryptopp)
 
 ## build
 On workpath of tinychain:
@@ -42,12 +53,12 @@ Specifically, run on Windows (example):
 ```
 
 ## 开发路径（TODO-LIST）
-1. 基础代码
-1. PoW 挖矿代码
-1. P2P网络
-1. 加密与账户模型
-1. 命令行与展示
-1. 共识可替换为PoS/DPoS etc
+1. 基础代码 - (DONE, to be improved)
+1. PoW 挖矿代码 - (DONE, to be improved)
+1. 加密与账户模型 (DOING)
+1. P2P网络- (TODO)
+1. 命令行与Web动态演示 - (DOING)
+1. 共识可替换为PoS/DPoS etc - (TODO)
 
 ## 仓库介绍
 * cli-tinychain文件夹：命令行
