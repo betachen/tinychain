@@ -9,6 +9,7 @@
 namespace tinychain
 {
 
+// ----------------------- class databse -------------------
 void database::print(){
     sqlite3pp::database db_conn{db_name_};
     log::debug("database")<<"====== Print begin =====";
@@ -38,7 +39,7 @@ void database::init(){
     sqlite3pp::database db_conn{db_name_};
     try {
         sqlite3pp::command cmd(db_conn, "create table if not EXISTS block ( \
-          number bigint primary KEY , \
+          height bigint primary KEY , \
           hash char(64) not null, \
           bits bigint, \
           transaction_count INTEGER , \
@@ -63,6 +64,44 @@ void database::init(){
     db_conn.disconnect();
 }
 
+// -------------------- class chain_database ------------------
+uint64_t chain_database::push(const block& newblock) {
+
+    sqlite3pp::transaction xct(db_conn_);
+    sqlite3pp::command cmd(db_conn_, "INSERT INTO block (height, hash, bits, time_stamp) VALUES (?, ?, ?, ?)");
+    cmd.binder() << static_cast<long long int>(newblock.header_.height) 
+        << newblock.header_.hash << static_cast<long long int>(newblock.header_.difficulty) 
+        << static_cast<long long int>(newblock.header_.timestamp);
+
+    log::debug("database")<<"chenhao2:"<< newblock.header_.hash;
+
+    cmd.execute();
+    xct.commit();
+    return 11u;
+}
+
+block chain_database::get_last_block() {
+
+    block cc;
+    sqlite3pp::query qry(db_conn_, "SELECT height, hash, bits, time_stamp FROM block where height = (SELECT count(*) - 1 FROM block)");
+    for (auto i = qry.begin(); i != qry.end(); ++i) {
+        cc.header_.height = (*i).get<long long int>(0);
+        cc.header_.hash = (*i).get<const char*>(1);
+        cc.header_.difficulty = (*i).get<long long int>(2);
+        cc.header_.timestamp = (*i).get<long long int>(3);
+    }
+    log::info("database")<<"last_block_hash:"<< cc.header_.hash;
+
+    return cc;
+}
+
+uint64_t chain_database::height() {
+    sqlite3pp::query qry(db_conn_, "SELECT count(*) - 1 FROM block");
+    sqlite3pp::query::iterator i = qry.begin();
+    return (*i).get<long long int>(0);
+}
+
+// -------------------- class key_pair_database ------------------
 //使用CryptoPP的RSA库生成新的密钥对
 key_pair key_pair_database::get_new_key_pair() {
     key_pair key;

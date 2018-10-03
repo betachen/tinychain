@@ -21,14 +21,14 @@ int main(int argc, char* argv[])
     d.init();
     d.print();
 
-    // 初始化本地JSON-RPC服务
+    // 初始化本地服务
     node my_node;
     mgbubble::RestServ Server{"webroot", my_node};
     auto& conn = Server.bind("0.0.0.0:8000");
     mg_set_protocol_http_websocket(&conn);
     mg_set_timer(&conn, mg_time() + mgbubble::RestServ::session_check_interval);
 
-    // 启动本地JSON-RPC服务
+    // 启动本地服务
     log::info("main")<<"httpserver started";
     Server.run();
 

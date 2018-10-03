@@ -80,6 +80,7 @@ public:
 
     private_key_t private_key() const { return private_key_; }
 
+    // 构造base64的字符串密钥对
     auto encode_pair() const { 
         // get public key
         public_key_t public_key(private_key_);
@@ -97,6 +98,7 @@ public:
         return std::make_pair(encoded_prik, encoded_pubk);
     }
 
+    // 格式化为JSON
     Json::Value to_json() const {
         Json::Value root;
         auto&& keypair = encode_pair();

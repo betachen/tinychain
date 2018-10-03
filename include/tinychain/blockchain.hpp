@@ -17,7 +17,7 @@ class blockchain
 public:
     typedef block::tx_list_t memory_pool_t;
 
-    blockchain(uint16_t id = 3721):id_(id) {
+    blockchain(uint16_t id = 1991):id_(id) {
         id_ = id;
         create_genesis_block();
     }
@@ -34,7 +34,7 @@ public:
     void test();
 
     void push_block(const block& new_block){
-        //chain_.push(new_block);
+        chain_.push(new_block);
     }
 
     uint64_t height() { return chain_.height(); }

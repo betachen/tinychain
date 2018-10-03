@@ -45,9 +45,12 @@ public:
     }
     void test();
 
-    uint64_t height() { return 11u; }
+    // inesert block into database
+    uint64_t push(const block& newblock);
 
-    auto get_last_block() { return true; }
+    uint64_t height();
+
+    block get_last_block();
 
     bool get_block (const sha256_t block_hash, block& b) {
         return true;
@@ -69,19 +72,13 @@ private:
 class key_pair_database:public database
 {
 public:
-    typedef std::vector<key_pair> key_pair_list_t;
-
-    key_pair_database()  {};
+    key_pair_database() {};
     key_pair_database(const key_pair_database&)  = default;
     key_pair_database(key_pair_database&&)  = default;
     key_pair_database& operator=(key_pair_database&&)  = default;
     key_pair_database& operator=(const key_pair_database&)  = default;
 
-    void print(){ std::cout<<"class key_pair_database"<<std::endl; }
-    void test();
-
     key_pair get_new_key_pair();
-
     bool list_keys(Json::Value& root);
 
 private:

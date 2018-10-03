@@ -53,16 +53,20 @@ bool miner::pow_once(block& new_block, address_t& addr) {
     // 难度调整: 
     // 控制每块速度，控制最快速度，大约10秒
     uint64_t time_peroid = new_block.header_.timestamp - prev_block.header_.timestamp;
-    //log::info("consensus") << "target:" << ncan;
+    log::info("consensus") << "block time :" << time_peroid <<" s";
 
     if (time_peroid <= 10u) {
         new_block.header_.difficulty = prev_block.header_.difficulty + 9000;
     } else {
-        if (prev_block.header_.difficulty <= 3000)
+        if (prev_block.header_.difficulty <= 3000) {
             new_block.header_.difficulty = prev_block.header_.difficulty + 9000;
-        else
+        } else {
             new_block.header_.difficulty = prev_block.header_.difficulty - 3000;
+        }
     }
+
+    log::debug("consensus")<< prev_block.header_.difficulty;
+
     // 计算挖矿目标值,最大值除以难度就目标值
     uint64_t target = 0xffffffffffffffff / prev_block.header_.difficulty;
 
