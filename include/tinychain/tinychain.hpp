@@ -14,9 +14,12 @@
 #include <random>
 #include <sstream>
 
-// Digital Signatue Algorithm
+// Encryption Algorithm from cryptopp
 #include <cryptopp/rsa.h> 
 #include <cryptopp/base64.h>
+#define CRYPTOPP_ENABLE_NAMESPACE_WEAK 1 //ignore #warning from comipler for MD5
+#include <cryptopp/md5.h>
+#include <cryptopp/hex.h>
 #include <cryptopp/osrng.h>
 #include <cryptopp/pssr.h>
 #include <cryptopp/whrlpool.h>
@@ -28,6 +31,7 @@ namespace tc = tinychain;
 
 // ---------------------------- typedef ----------------------------
 typedef std::string sha256_t;
+typedef std::string md5_t;
 typedef std::string address_t;
 typedef CryptoPP::RSA::PublicKey public_key_t;
 typedef CryptoPP::RSA::PrivateKey private_key_t;
@@ -35,6 +39,7 @@ typedef CryptoPP::RSA::PrivateKey private_key_t;
 // ---------------------------- ulitity ----------------------------
 uint64_t get_now_timestamp();
 sha256_t to_sha256(Json::Value jv);
+md5_t to_md5(const std::string& message);
 address_t key_to_address(const public_key_t& public_key);
 address_t key_to_address(const private_key_t& private_key);
 

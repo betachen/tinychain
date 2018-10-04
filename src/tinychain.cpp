@@ -10,10 +10,22 @@ namespace tinychain {
 
 // 从公钥推导地址的函数
 address_t key_to_address(const public_key_t& public_key) {
-    std::string encoded_pubk;
-    public_key.Save(CryptoPP::Base64Encoder(new CryptoPP::StringSink(encoded_pubk)).Ref());
-    // 截取0~41位公钥用作地址
-    return (encoded_pubk.substr(0, 41));
+	// 首先获取标准格式的公钥
+    std::string x509_pubk; //binary pubk as x.509
+	CryptoPP::StringSink ss(x509_pubk);
+	public_key.Save(ss);
+
+	// 进行一次MD5作为地址
+	return to_md5(x509_pubk);
+
+#if 0
+    CryptoPP::Base64Encoder pubk_slink(new CryptoPP::StringSink(encoded_pubk), false);
+    public_key.DEREncode(pubk_slink);
+    pubk_slink.MessageEnd();
+    // sha256 public key 作为地址，和sha256区别开来，并且简短
+	auto&& sha256_pubk = sha256(encoded_pubk);
+    return sha256_pubk;
+#endif
 }
 
 address_t key_to_address(const private_key_t& private_key) {
@@ -43,6 +55,21 @@ sha256_t to_sha256(Json::Value jv){
     return sha256(oss.str());
 }
 
+md5_t to_md5(const std::string& message){
+	byte digest[ CryptoPP::Weak::MD5::DIGESTSIZE ];
+	
+	CryptoPP::Weak::MD5 hash;
+	hash.CalculateDigest( digest, (const byte*)message.c_str(), message.length() );
+	
+	CryptoPP::HexEncoder encoder;
+	std::string output;
+	
+	encoder.Attach( new CryptoPP::StringSink( output ) );
+	encoder.Put( digest, sizeof(digest) );
+	encoder.MessageEnd();
+
+	return output;
+}
 
 // #################### 以下类的成员函数实现 ##################
 //
