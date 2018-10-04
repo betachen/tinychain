@@ -23,11 +23,19 @@ bool commands::exec(Json::Value& out){
                 auto ret = node_.chain().send(vargv_[1], amount);
                 out = ret.toStyledString();
             } else {
-                out = "invalid paramas";
+                out = "Invalid or Empty paramas";
             }
 
         } else if  (*(vargv_.begin()) == "getbalance") {
-            out = "getbalance-ret-not-yet";
+            out = "getbalance-TODO";
+
+        } else if  (*(vargv_.begin()) == "getlastblock") {
+            auto&& b = node_.chain().get_last_block();
+            out = b.to_json();
+
+        } else if  (*(vargv_.begin()) == "getheight") {
+            out = node_.chain().get_height();
+
         } else if  (*(vargv_.begin()) == "startmining") {
             std::string addr;
             if (vargv_.size() >= 2) {
@@ -39,7 +47,7 @@ bool commands::exec(Json::Value& out){
                 out["result"] = "start mining on your random address: " + addr;
             }
         } else {
-            out = "<getnewkey>  <listkeys>  <getbalance>  <send>  <startmining>";
+            out = "<getnewkey>  <listkeys>  <getlastblock> <getheight> <getbalance>  <send>  <startmining>";
             return false;
         }
     } catch (std::exception& ex) {
@@ -50,7 +58,7 @@ bool commands::exec(Json::Value& out){
     return true;
 }
 
-const commands::vargv_t command_list = {"getnewkey","send","getbalance", "startmining"};
+const commands::vargv_t command_list = {"getnewkey","getlastblock","getheight","send","getbalance", "startmining"};
 
 
 } //tinychain
