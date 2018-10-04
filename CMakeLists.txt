@@ -57,8 +57,8 @@ SET(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH}" "${PROJECT_SOURCE_DIR}/etc")
 SET(CMAKE_INSTALL_PREFIX "/usr/local/tinychain")
 
 set(Boost_USE_STATIC_LIBS   ON)
-FIND_PACKAGE(Boost 1.56 REQUIRED COMPONENTS date_time)
-    #filesystem system program_options)
+FIND_PACKAGE(Boost 1.56 REQUIRED COMPONENTS date_time filesystem)
+    #system program_options)
 INCLUDE_DIRECTORIES("${Boost_INCLUDE_DIRS}")
 
 # ------------------ includes --------------------

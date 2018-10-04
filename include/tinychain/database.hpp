@@ -7,6 +7,7 @@
 #include <algorithm>
 #include <tinychain/tinychain.hpp>
 #include <sqlite3pp/sqlite3pp.h>
+#include <boost/filesystem.hpp>
 //#include <sqlite3pp/sqlite3ppext.h>
 
 namespace tinychain
@@ -23,6 +24,7 @@ public:
 
     virtual void print();
     void init();
+    void create_genesis_block();
 
 protected:
     const char* db_name_ = "tinychain.db";
@@ -46,7 +48,7 @@ public:
     void test();
 
     // inesert block into database
-    uint64_t push(const block& newblock);
+    void push(const block& newblock);
 
     uint64_t height();
 

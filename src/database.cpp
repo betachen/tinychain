@@ -34,8 +34,35 @@ void database::print(){
     log::debug("database")<<"====== Print end =====";
 }
 
+void database::create_genesis_block() {
+
+    block genesis_block;
+
+    genesis_block.header_.prev_hash = "0000000000000000000000000000000000000000000000000000000000000000";
+    genesis_block.header_.timestamp = get_now_timestamp();
+    genesis_block.header_.tx_count = 1;
+    genesis_block.header_.difficulty = 1;
+
+    genesis_block.header_.hash = to_sha256(genesis_block.to_json());
+
+    // TO BE Improved. => Same one
+    chain_database chain;
+    chain.push(genesis_block);
+}
+
+
 void database::init(){
-    log::info("database")<<"Initializing...";
+
+    namespace bf = boost::filesystem;
+
+    auto db_path = bf::current_path() / db_name_;
+
+    if (bf::exists(db_path)) {
+        log::info("database")<<"Using "<<db_name_;
+        return;
+    }
+
+    log::info("database")<<"Initializing "<<db_name_;
     sqlite3pp::database db_conn{db_name_};
     try {
         sqlite3pp::command cmd(db_conn, "create table if not EXISTS block ( \
@@ -61,11 +88,15 @@ void database::init(){
         db_conn.disconnect();
         log::error("database")<<"disconnect db with error:"<< ex.what();
     }
+
     db_conn.disconnect();
+
+    log::info("database")<<"Creating genesis block";
+    create_genesis_block();
 }
 
 // -------------------- class chain_database ------------------
-uint64_t chain_database::push(const block& newblock) {
+void chain_database::push(const block& newblock) {
 
     sqlite3pp::transaction xct(db_conn_);
     sqlite3pp::command cmd(db_conn_, "INSERT INTO block (height, hash, bits, time_stamp) VALUES (?, ?, ?, ?)");
@@ -77,7 +108,6 @@ uint64_t chain_database::push(const block& newblock) {
 
     cmd.execute();
     xct.commit();
-    return 11u;
 }
 
 block chain_database::get_last_block() {

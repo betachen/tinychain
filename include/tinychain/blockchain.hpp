@@ -19,7 +19,6 @@ public:
 
     blockchain(uint16_t id = 1991):id_(id) {
         id_ = id;
-        create_genesis_block();
     }
     blockchain(const blockchain&)  = default;
     blockchain(blockchain&&)  = default;
@@ -37,7 +36,7 @@ public:
         chain_.push(new_block);
     }
 
-    uint64_t height() { return chain_.height(); }
+    uint64_t get_height();
 
     block get_last_block(); 
 
@@ -60,8 +59,6 @@ public:
         pool_.push_back(tx);
         log::info("blockchain-pool")<<"new tx:"<<tx.to_json().toStyledString();
     }
-
-    void create_genesis_block();
 
     key_pair get_new_key_pair(){
         return key_pair_database_.get_new_key_pair();
