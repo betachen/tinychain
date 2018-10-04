@@ -56,10 +56,10 @@ sha256_t to_sha256(Json::Value jv){
 }
 
 md5_t to_md5(const std::string& message){
-	byte digest[ CryptoPP::Weak::MD5::DIGESTSIZE ];
+	uint8_t digest[ CryptoPP::Weak::MD5::DIGESTSIZE ];
 	
 	CryptoPP::Weak::MD5 hash;
-	hash.CalculateDigest( digest, (const byte*)message.c_str(), message.length() );
+	hash.CalculateDigest( digest, (const uint8_t*)message.c_str(), message.length() );
 	
 	CryptoPP::HexEncoder encoder;
 	std::string output;
