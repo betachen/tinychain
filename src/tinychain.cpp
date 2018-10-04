@@ -72,29 +72,63 @@ md5_t to_md5(const std::string& message){
 }
 
 // #################### 以下类的成员函数实现 ##################
-//
+
+Json::Value tx::item_to_json (input_item_t in) {
+    Json::Value root;
+    root["hash"] = std::get<0>(in);
+    root["index"] = std::get<1>(in);
+    root["script_sign"] = std::get<2>(in);
+    return root;
+}
+Json::Value tx::item_to_json (output_item_t out) {
+    Json::Value root;
+    root["address"] = std::get<0>(out);
+    root["value"] = std::get<1>(out);
+    root["script_pubkey"] = std::get<2>(out);
+    return root;
+}
+
+Json::Value tx::to_json(){
+    Json::Value root;
+
+    Json::Value inputs;
+    for (auto& each: inputs_) {
+        inputs.append(item_to_json(each));
+    }
+    root["inputs"] = inputs;
+
+    Json::Value outputs;
+    for (auto& each: outputs_) {
+        outputs.append(item_to_json(each));
+    }
+    root["outputs"] = outputs;
+    hash_ = to_sha256(root);
+    root["hash"] = hash_;
+
+    return root;
+}
+
 tx::tx(address_t& address) {
-    auto&& input_item = std::make_pair("00000000000000000000000000000000", 0);
+    // coinbase tx: TODO
+    auto&& input_item = std::make_tuple("00000000000000000000000000000000", 0, "0ffffffffffffff");
     inputs_.push_back(input_item);
 
     // build tx
-    auto&& ouput_item = std::make_pair(address, 1000);
+    auto&& ouput_item = std::make_tuple(address, 1000, "1ffffffffffffffff");
     outputs_.push_back(ouput_item);
 
     // hash
     to_json();
 }
 
-
-
 tx::tx(address_t& address, uint64_t amount) {
-    //get_balance_from blokchain
+    //get_balance_from blokchain, P2PKH
     //TODO
-    auto&& input_item = std::make_pair(sha256(address), 0);
+    auto&& input_item = std::make_tuple(to_md5(address), 0, "0ffffffffffffff");
     inputs_.push_back(input_item);
 
     // build tx
-    auto&& ouput_item = std::make_pair(address, amount);
+    auto&& ouput_item = std::make_tuple(address, amount, "1ffffffffffffffff");
     outputs_.push_back(ouput_item);
 
     // hash

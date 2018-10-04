@@ -33,6 +33,9 @@ namespace tc = tinychain;
 typedef std::string sha256_t;
 typedef std::string md5_t;
 typedef std::string address_t;
+typedef std::string script_sign_t;
+typedef std::string script_pubkey_t;
+typedef std::string data_t;
 typedef CryptoPP::RSA::PublicKey public_key_t;
 typedef CryptoPP::RSA::PrivateKey private_key_t;
 
@@ -120,11 +123,11 @@ private:
     private_key_t private_key_;
 };
 
-class tx
+class tx //tx is short for transaction
 {
 public:
-    typedef std::pair<sha256_t, uint8_t> input_item_t;
-    typedef std::pair<address_t, uint64_t> output_item_t;
+    typedef std::tuple<sha256_t, uint8_t, script_sign_t> input_item_t;
+    typedef std::tuple<address_t, uint64_t, script_pubkey_t> output_item_t;
 
     typedef std::vector<input_item_t> input_t;
     typedef std::vector<output_item_t> output_t;
@@ -148,39 +151,10 @@ public:
     void print(){ std::cout<<"class tx"<<std::endl; }
     void test();
 
-    Json::Value item_to_json (input_item_t in) {
-        Json::Value root;
-        root["hash"] = in.first;
-        root["index"] = in.second;
-        return root;
-    }
-    Json::Value item_to_json (output_item_t out) {
-        Json::Value root;
-        root["address"] = out.first;
-        root["value"] = out.second;
-        return root;
-    }
-
-    Json::Value to_json(){
-        Json::Value root;
-
-        Json::Value inputs;
-        for (auto& each: inputs_) {
-            inputs.append(item_to_json(each));
-        }
-        root["inputs"] = inputs;
-
-        Json::Value outputs;
-        for (auto& each: outputs_) {
-            outputs.append(item_to_json(each));
-        }
-        root["outputs"] = outputs;
-        hash_ = to_sha256(root);
-        root["hash"] = hash_;
-
-        return root;
-    }
-
+    Json::Value item_to_json (input_item_t in);
+    Json::Value item_to_json (output_item_t out);
+    Json::Value to_json();
+    
     input_t inputs() const { return inputs_; }
     output_t outputs() const { return outputs_; }
     sha256_t hash() const { return hash_; }

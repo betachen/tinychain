@@ -44,7 +44,7 @@ bool commands::exec(Json::Value& out){
                 out["result"] = "start mining on address: " + addr;
             } else {
                 node_.miner_run(addr);
-                out["result"] = "start mining on your random address: " + addr;
+                out["result"] = "start mining on a random address of your wallet";
             }
         } else {
             out = "<getnewkey>  <listkeys>  <getlastblock> <getheight> <getbalance>  <send>  <startmining>";

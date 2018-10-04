@@ -33,6 +33,7 @@ void miner::start(address_t& addr){
 }
 
 tx miner::create_coinbase_tx(address_t& addr) {
+    // TODO
     return tx{addr};
 }
 
@@ -70,7 +71,7 @@ bool miner::pow_once(block& new_block, address_t& addr) {
     // 计算挖矿目标值,最大值除以难度就目标值
     uint64_t target = 0xffffffffffffffff / prev_block.header_.difficulty;
 
-    // 设置coinbase交易
+    // 设置coinbase交易, CHENHAO => 这里继续，设置coinbase，后续实现验证交易和区块。
     auto&& tx = create_coinbase_tx(addr);
     pool.push_back(tx);
 
@@ -99,12 +100,13 @@ bool miner::pow_once(block& new_block, address_t& addr) {
 }
 
 bool validate_tx(blockchain& chain, const tx& new_tx) {
+    // TODO
     // input exsited?
     auto&& inputs = new_tx.inputs();
     for (auto& each : inputs) {
 
         tx pt;
-        if (!chain.get_tx(each.first, pt)) {
+        if (!chain.get_tx(std::get<0>(each), pt)) {
             return false;
         }
 
@@ -116,6 +118,7 @@ bool validate_tx(blockchain& chain, const tx& new_tx) {
 }
 
 bool validate_block(const tx& new_block) {
+    // TODO
 
     return true;
 }
