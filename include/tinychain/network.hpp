@@ -9,8 +9,6 @@
 namespace tinychain
 {
 
-void ws_send(std::string&& msg);
-
 class network
 {
 public:

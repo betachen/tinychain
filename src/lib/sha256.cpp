@@ -1,6 +1,6 @@
 #include <cstring>
 #include <fstream>
-#include <tinychain/sha256.hpp>
+#include <tinychain/lib/sha256.hpp>
 
 namespace tinychain {
  

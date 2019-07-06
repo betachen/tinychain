@@ -4,7 +4,7 @@
  *
 **/
 #pragma once
-#include <jsoncpp/json/json.h>
+#include <contrib/jsoncpp/json/json.h>
 #include <tinychain/tinychain.hpp>
 #include <tinychain/node.hpp>
 

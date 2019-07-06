@@ -1,49 +1,25 @@
-/**
- * Copyright (c) 2011-2015 libbitcoin developers (see AUTHORS)
- * Copyright (c) 2016-2018 metaverse core developers (see MVS-AUTHORS)
- *
- * This file is part of metaverse-explorer.
- *
- * metaverse-explorer is free software: you can redistribute it and/or
- * modify it under the terms of the GNU Affero General Public License with
- * additional permissions to the one published by the Free Software
- * Foundation, either version 3 of the License, or (at your option)
- * any later version. For more information see LICENSE.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
- */
 
-#include <metaverse/mgbubble/MongooseCli.hpp>
-#include <jsoncpp/json/json.h>
+#include <contrib/jsoncpp/json/json.h>
+#include <tinychain/lib/SimpleWeb.hpp>
 
-/**
- * Invoke this program with the raw arguments provided on the command line.
- * All console input and output streams for the application originate here.
- * @param argc  The number of elements in the argv array.
- * @param argv  The array of arguments, including the process.
- * @return      The numeric result to return via console exit.
- */
-using namespace mgbubble::cli;
-
-void my_impl(const http_message* hm)
-{
-    auto&& reply = std::string(hm->body.p, hm->body.len);
-    std::cout << reply << std::endl;
-}
+using namespace tinychain;
+using namespace std;
 
 int main(int argc, char* argv[])
 {
-    std::string url{"127.0.0.1:8000/rpc"};
+    const std::string url{"127.0.0.1:8000"};
 
-    // HTTP request call commands
-    HttpReq req(url, 3000, reply_handler(my_impl));
+    SimpleWeb::CaseInsensitiveMultimap header;
+    header.emplace("content-type", "application/json");
 
+    HttpClient client{url};
+
+
+    char** pp = argv;
+    pp++; // argv[0] => argv[1]
+    string params{"/"};
+    params += *pp;
+#if 0
     Json::Value jsonvar;
     Json::Value jsonopt;
     jsonvar["jsonrpc"] = "2.0";
@@ -58,7 +34,10 @@ int main(int argc, char* argv[])
             jsonvar["params"].append(argv[i]);
         }
     }
+#endif
 
-    req.post(jsonvar.toStyledString());
+    auto resp = client.request("GET", params);
+    std::cout<< resp->content.toStringView() << std::endl << std::flush;
+
     return 0;
 }

@@ -11,9 +11,9 @@ SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-deprecated-declarations")
 ENDIF()
 
 IF(ENABLE_SHARED_LIBS)
-    TARGET_LINK_LIBRARIES(cli-tinychain ${mongoose_LIBRARY} ${jsoncpp_LIBRARY})
+    TARGET_LINK_LIBRARIES(cli-tinychain ${Boost_LIBRARIES} ${jsoncpp_LIBRARY})
 ELSE()
-    TARGET_LINK_LIBRARIES(cli-tinychain ${mongoose_LIBRARY} ${jsoncpp_LIBRARY})
+    TARGET_LINK_LIBRARIES(cli-tinychain ${Boost_LIBRARIES} ${jsoncpp_LIBRARY})
 ENDIF()
 
 INSTALL(TARGETS cli-tinychain DESTINATION bin)

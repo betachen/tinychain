@@ -54,7 +54,7 @@ FILE(MAKE_DIRECTORY "${LIBRARY_OUTPUT_PATH}")
 
 SET(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH}" "${PROJECT_SOURCE_DIR}/etc")
 #SET(CMAKE_INSTALL_PREFIX ${PROJECT_BINARY_DIR})
-SET(CMAKE_INSTALL_PREFIX "/usr/local/tinychain")
+SET(CMAKE_INSTALL_PREFIX "/usr/local/bin")
 
 set(Boost_USE_STATIC_LIBS   ON)
 FIND_PACKAGE(Boost 1.56 REQUIRED COMPONENTS date_time filesystem)
@@ -62,14 +62,12 @@ FIND_PACKAGE(Boost 1.56 REQUIRED COMPONENTS date_time filesystem)
 INCLUDE_DIRECTORIES("${Boost_INCLUDE_DIRS}")
 
 # ------------------ includes --------------------
-INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/contrib")
+INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/")
 INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/include")
 
 IF(ENABLE_SHARED_LIBS)
-  SET(mongoose_LIBRARY mongoose_shared)
   SET(jsoncpp_LIBRARY jsoncpp_shared)
 ELSE()
-  SET(mongoose_LIBRARY mongoose_static)
   SET(jsoncpp_LIBRARY jsoncpp_static)
 ENDIF()
 

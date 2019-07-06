@@ -4,12 +4,12 @@ A mini blockchain implementation in C++14 构建迷你区块链——《深入�
 ## 简要说明 INTRODUNCTION
 tinychain是一个业余的项目，旨在为大家提供微型的简单易懂的供学习的代码。
 以下是涉及的一些基础技术：
-* 加密库 - RSA
+* 非对称加密算法 - cryptopp:RSA
 * 本地持久化存储 - sqlite3
-* P2P网络 - 暂定gossip
-* 网络文本协议 - JSON-RPC
-* HTTP Server - mongoose
-* 正在选取中...
+* P2P网络发现算法 - gossip
+* P2P网络传输协议 - protobuf
+* 命令交互协议 - JSON-RPC
+* HTTP Server/Websocket Server - SimpleWeb
 
 ## 锻造工具 Toolchain
 * gcc/clang support C++14
@@ -65,3 +65,13 @@ Specifically, run on Windows (example):
 * etc文件夹：tinychain演示网页等
 * include文件夹：tinychain中类的设计以及第三方库的头文件
 * src文件夹：tinychain和第三方库的具体实现
+
+## 库的依赖
+如果你无法通过apt/brew安装cryptopp,可以选择源码安装
+```
+$ wget https://www.cryptopp.com/cryptopp565.zip
+$ mkdir -p cryptopp
+$ unzip cryptopp565.zip -d cryptopp
+$ make -f GNUmakefile
+$ make install
+```

@@ -5,13 +5,12 @@
 **/
 #include <tinychain/tinychain.hpp>
 #include <tinychain/node.hpp>
-#include <metaverse/mgbubble.hpp> 
+#include <tinychain/rest.hpp>
 
 using namespace tinychain;
-using namespace mgbubble;
 
 // global logger
-Logger logger;
+//Logger logger;
 
 int main(int argc, char* argv[])
 {
@@ -22,16 +21,14 @@ int main(int argc, char* argv[])
     d.print();
 
     // 初始化本地服务
-    node my_node;
-    mgbubble::RestServ Server{"webroot", my_node};
-    auto& conn = Server.bind("0.0.0.0:8000");
-    mg_set_protocol_http_websocket(&conn);
-    mg_set_timer(&conn, mg_time() + mgbubble::RestServ::session_check_interval);
+    node myNode;
+    Rest rest{2};
+    rest.bind(8000);
+    rest.start();
 
     // 启动本地服务
-    log::info("main")<<"httpserver started";
-    Server.run();
-
+    log::info("main")<<"Rest Server started";
+    rest.join();
 
 #if 0 //测试用代码 后续会移除
     //std::string input = "grape";
