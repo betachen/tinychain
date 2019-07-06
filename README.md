@@ -75,3 +75,39 @@ $ unzip cryptopp565.zip -d cryptopp
 $ make -f GNUmakefile
 $ make install
 ```
+
+## cli-tinychain 命令说明
+#### getnewkey
+创新一对新的key pair
+无参数
+
+#### listkeys
+查看已经创建的key pairs
+无参数
+
+#### startmining
+开始挖矿，可多次启动，每次启动都会创建一个新的线程
+可选参数-address
+```
+$ ./cli-tinychain startmining
+$ ./cli-tinychain startmining $address
+```
+
+#### stopmining
+停止挖矿，将停止所有挖矿线程，停止过程将耗费几秒钟
+无参数
+
+#### getheight
+查看当前高度
+无参数
+
+#### getlastblock
+查看最新区块
+无参数
+
+#### send
+发送交易
+必填参数-address amount
+```
+$ ./cli-tinychain send $adress $amount
+```
