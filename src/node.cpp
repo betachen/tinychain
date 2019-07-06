@@ -10,7 +10,7 @@ namespace tinychain
 {
 
 
-void node::test(){}
+void Node::test(){}
 
 
 } //tinychain

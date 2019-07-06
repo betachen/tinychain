@@ -21,7 +21,6 @@ int main(int argc, char* argv[])
     d.print();
 
     // 初始化本地服务
-    node myNode;
     Rest rest{2};
     rest.bind(8000);
     rest.start();

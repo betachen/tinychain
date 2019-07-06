@@ -7,37 +7,41 @@ using namespace std;
 
 int main(int argc, char* argv[])
 {
-    const std::string url{"127.0.0.1:8000"};
+    std::string url{"127.0.0.1:8000"};
 
     SimpleWeb::CaseInsensitiveMultimap header;
     header.emplace("content-type", "application/json");
 
     HttpClient client{url};
 
-
+    std::string uri{"/"};
     char** pp = argv;
-    pp++; // argv[0] => argv[1]
-    string params{"/"};
-    params += *pp;
-#if 0
-    Json::Value jsonvar;
-    Json::Value jsonopt;
-    jsonvar["jsonrpc"] = "2.0";
-    jsonvar["id"] = 1;
-    jsonvar["method"] = (argc > 1) ? argv[1] : "help";
-    jsonvar["params"] = Json::arrayValue;
-
-    if (argc > 2)
-    {
-        for (int i = 2; i < argc; i++)
-        {
-            jsonvar["params"].append(argv[i]);
-        }
+    if (argc > 1) {
+      pp++; // argv[0] => argv[1]
+      uri += *pp++;
     }
-#endif
 
-    auto resp = client.request("GET", params);
-    std::cout<< resp->content.toStringView() << std::endl << std::flush;
+    std::stringstream ss;
+    bool isFirst{true};
+    int i{1};
+    for (; i < argc - 1; ++i) {
 
-    return 0;
+      if (!isFirst) ss << ' ';
+      ss << *pp++;
+      isFirst = false;
+
+    }
+
+    //std::cout<< ss.str() << std::endl;
+    try {
+      auto resp = client.request("POST", uri, ss.str(), header);
+      std::cout << resp->content.toStringView() << std::endl << std::flush;
+
+      return 0;
+    } catch (boost::system::system_error& e) {
+      std::cout <<e.what()<<std::endl;
+
+      return -1;
+    }
+
 }

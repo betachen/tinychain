@@ -72,15 +72,15 @@ public:
 
     Json::Value send(address_t addr, uint64_t amount){
         Json::Value root;
-        tx target_tx{addr, amount};
+        tx sent{addr, amount};
 
         //本地pool
-        collect(target_tx);
+        collect(sent);
         
         //广播
         //ws_send(target_tx.to_json().toStyledString());
 
-        return root;
+        return sent.to_json();
     }
 
 private:

@@ -12,8 +12,9 @@
 namespace tinychain
 {
 
-void miner::start(address_t& addr){
-    for(;;) {
+void miner::start(address_t addr){
+    while (isMining_)
+    {
         block new_block;
 
         // 未找到，继续找

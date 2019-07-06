@@ -5,6 +5,7 @@
 **/
 #pragma once
 #include <tinychain/tinychain.hpp>
+#include <tinychain/node.hpp>
 #include <tinychain/lib/SimpleWeb.hpp>
 
 namespace tinychain
@@ -31,8 +32,17 @@ public:
     void print(){ std::cout<<"class network"<<std::endl; }
     void test();
 
+    void getnewkey(RestResponsePtr rep, RestRequestPtr req);
+    void listkeys(RestResponsePtr rep, RestRequestPtr req);
+    void getheight(RestResponsePtr rep, RestRequestPtr req);
+    void getlastblock(RestResponsePtr rep, RestRequestPtr req);
+    void getbalance(RestResponsePtr rep, RestRequestPtr req);
+    void startmining(RestResponsePtr rep, RestRequestPtr req);
+    void stopmining(RestResponsePtr rep, RestRequestPtr req);
+    void send(RestResponsePtr rep, RestRequestPtr req);
 
 private:
+    Node node_;
 };
 
 }// tinychain

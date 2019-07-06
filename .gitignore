@@ -29,3 +29,4 @@ touch.sh
 *.exe
 *.out
 *.app
+*.swp

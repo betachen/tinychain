@@ -13,7 +13,12 @@ namespace tinychain
 class miner
 {
 public:
-    miner(blockchain& chain):chain_(chain) {};
+    miner(blockchain& chain, std::atomic<bool>& isMining)
+      :chain_{chain},
+        isMining_{isMining}
+    {
+    }
+
     miner(const miner&) = default;
     miner(miner&&) = default;
     miner& operator=(miner&&) = default;
@@ -22,7 +27,7 @@ public:
     void print(){ std::cout<<"class miner"<<std::endl; }
 
     //开始挖矿
-    void start(address_t& addr);
+    void start(address_t addr);
     inline bool pow_once(block& new_block, address_t& addr);
 
     // 填写自己奖励——coinbase
@@ -30,6 +35,7 @@ public:
 
 private:
     blockchain& chain_;
+    std::atomic<bool>& isMining_;
 };
 
 

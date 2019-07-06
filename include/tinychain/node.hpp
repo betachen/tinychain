@@ -14,30 +14,33 @@
 namespace tinychain
 {
 
-class node
+class Node
 {
 public:
-    node()  noexcept {
-        log::info("node")<<"node started";
+    Node()  noexcept {
+        log::info("Node")<<"Node started";
     }
 
-    node(const node&)  = default;
-    node(node&&)  = default;
-    node& operator=(node&&)  = default;
-    node& operator=(const node&)  = default;
+    Node(const Node&)  = default;
+    Node(Node&&)  = default;
+    Node& operator=(Node&&)  = default;
+    Node& operator=(const Node&)  = default;
 
     void test();
     bool check();
 
-    void miner_run(address_t address) {
-        // miner
-        address_t miner_addr;
+    bool is_mining() const { return isMining_.load(); }
+
+    void miner_stop() { isMining_ = false; }
+
+    void miner_run(address_t& address) {
+        isMining_ = true;
+
         if (address.empty()){
-            miner_addr = blockchain_.get_new_key_pair().address();
-        } else {
-            miner_addr = address;
+            address = blockchain_.get_new_key_pair().address();
         }
-        std::thread miner_service(std::bind(&miner::start, &miner_, miner_addr));
+
+        std::thread miner_service(std::bind(&miner::start, &miner_, address));
         miner_service.detach();
     }
 
@@ -48,7 +51,9 @@ private:
 
     network network_;
     blockchain blockchain_;
-    miner miner_{blockchain_};
+
+    std::atomic<bool> isMining_{false};
+    miner miner_{blockchain_, isMining_};
 };
 
 
