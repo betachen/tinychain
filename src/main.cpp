@@ -19,15 +19,23 @@ int main(int argc, char* argv[])
     database d;
     d.init();
     d.print();
-
     // 初始化本地服务
+    // TODO
+
+    // 启动HTTP服务
     Rest rest{2};
     rest.bind(8000);
     rest.start();
-
-    // 启动本地服务
     log::info("main")<<"Rest Server started";
+
+    // 启动WebSocket服务
+    WebSocketServer ws{2};
+    ws.bind(8001);
+    ws.start();
+    log::info("main")<<"WebSocket Server started";
+
     rest.join();
+    ws.join();
 
 #if 0 //测试用代码 后续会移除
     //std::string input = "grape";
