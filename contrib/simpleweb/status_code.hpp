@@ -1,13 +1,14 @@
 #ifndef SIMPLE_WEB_STATUS_CODE_HPP
 #define SIMPLE_WEB_STATUS_CODE_HPP
 
+#include <cstdlib>
 #include <map>
 #include <string>
 #include <unordered_map>
 #include <vector>
 
 namespace SimpleWeb {
-  enum class StatusCode : int {
+  enum class StatusCode {
     unknown = 0,
     information_continue = 100,
     information_switching_protocols,
@@ -140,17 +141,25 @@ namespace SimpleWeb {
   }
 
   inline StatusCode status_code(const std::string &status_code_string) noexcept {
+    if(status_code_string.size() < 3)
+      return StatusCode::unknown;
+
+    auto number = status_code_string.substr(0, 3);
+    if(number[0] < '0' || number[0] > '9' || number[1] < '0' || number[1] > '9' || number[2] < '0' || number[2] > '9')
+      return StatusCode::unknown;
+
     class StringToStatusCode : public std::unordered_map<std::string, SimpleWeb::StatusCode> {
     public:
       StringToStatusCode() {
         for(auto &status_code : status_code_strings())
-          emplace(status_code.second, status_code.first);
+          emplace(status_code.second.substr(0, 3), status_code.first);
       }
     };
     static StringToStatusCode string_to_status_code;
-    auto pos = string_to_status_code.find(status_code_string);
+
+    auto pos = string_to_status_code.find(number);
     if(pos == string_to_status_code.end())
-      return StatusCode::unknown;
+      return static_cast<StatusCode>(atoi(number.c_str()));
     return pos->second;
   }
 

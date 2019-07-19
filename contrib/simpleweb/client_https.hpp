@@ -1,5 +1,5 @@
-#ifndef CLIENT_HTTPS_HPP
-#define CLIENT_HTTPS_HPP
+#ifndef SIMPLE_WEB_CLIENT_HTTPS_HPP
+#define SIMPLE_WEB_CLIENT_HTTPS_HPP
 
 #include "client_http.hpp"
 
@@ -47,13 +47,13 @@ namespace SimpleWeb {
     void connect(const std::shared_ptr<Session> &session) override {
       if(!session->connection->socket->lowest_layer().is_open()) {
         auto resolver = std::make_shared<asio::ip::tcp::resolver>(*io_service);
-        resolver->async_resolve(*query, [this, session, resolver](const error_code &ec, asio::ip::tcp::resolver::iterator it) {
+        async_resolve(*resolver, *host_port, [this, session, resolver](const error_code &ec, resolver_results results) {
           auto lock = session->connection->handler_runner->continue_lock();
           if(!lock)
             return;
           if(!ec) {
             session->connection->set_timeout(this->config.timeout_connect);
-            asio::async_connect(session->connection->socket->lowest_layer(), it, [this, session, resolver](const error_code &ec, asio::ip::tcp::resolver::iterator /*it*/) {
+            asio::async_connect(session->connection->socket->lowest_layer(), results, [this, session, resolver](const error_code &ec, async_connect_endpoint /*endpoint*/) {
               session->connection->cancel_timeout();
               auto lock = session->connection->handler_runner->continue_lock();
               if(!lock)
@@ -83,37 +83,38 @@ namespace SimpleWeb {
                         auto lock = session->connection->handler_runner->continue_lock();
                         if(!lock)
                           return;
-                        if((!ec || ec == asio::error::not_found) && response->streambuf.size() == response->streambuf.max_size()) {
-                          session->callback(session->connection, make_error_code::make_error_code(errc::message_size));
+                        if(response->streambuf.size() == response->streambuf.max_size()) {
+                          session->callback(make_error_code::make_error_code(errc::message_size));
                           return;
                         }
+
                         if(!ec) {
                           if(!ResponseMessage::parse(response->content, response->http_version, response->status_code, response->header))
-                            session->callback(session->connection, make_error_code::make_error_code(errc::protocol_error));
+                            session->callback(make_error_code::make_error_code(errc::protocol_error));
                           else {
-                            if(response->status_code.empty() || response->status_code.compare(0, 3, "200") != 0)
-                              session->callback(session->connection, make_error_code::make_error_code(errc::permission_denied));
+                            if(response->status_code.compare(0, 3, "200") != 0)
+                              session->callback(make_error_code::make_error_code(errc::permission_denied));
                             else
                               this->handshake(session);
                           }
                         }
                         else
-                          session->callback(session->connection, ec);
+                          session->callback(ec);
                       });
                     }
                     else
-                      session->callback(session->connection, ec);
+                      session->callback(ec);
                   });
                 }
                 else
                   this->handshake(session);
               }
               else
-                session->callback(session->connection, ec);
+                session->callback(ec);
             });
           }
           else
-            session->callback(session->connection, ec);
+            session->callback(ec);
         });
       }
       else
@@ -132,10 +133,10 @@ namespace SimpleWeb {
         if(!ec)
           this->write(session);
         else
-          session->callback(session->connection, ec);
+          session->callback(ec);
       });
     }
   };
 } // namespace SimpleWeb
 
-#endif /* CLIENT_HTTPS_HPP */
+#endif /* SIMPLE_WEB_CLIENT_HTTPS_HPP */

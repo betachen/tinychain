@@ -3,16 +3,22 @@
 
 #include "status_code.hpp"
 #include <atomic>
+#include <cstdlib>
 #include <iostream>
 #include <memory>
 #include <string>
 #include <unordered_map>
 
-#if __cplusplus > 201402L || (defined(_MSC_VER) && _MSC_VER >= 1910)
+#if __cplusplus > 201402L || _MSVC_LANG > 201402L
 #include <string_view>
 namespace SimpleWeb {
   using string_view = std::string_view;
 }
+//#elif !defined(USE_STANDALONE_ASIO)
+//#include <boost/utility/string_ref.hpp>
+//namespace SimpleWeb {
+//  using string_view = boost::string_ref;
+//}
 #else
 //CHENHAO FIX
 #include <experimental/string_view>
@@ -224,7 +230,6 @@ namespace SimpleWeb {
   public:
     /// Parse request line and header fields
     static bool parse(std::istream &stream, std::string &method, std::string &path, std::string &query_string, std::string &version, CaseInsensitiveMultimap &header) noexcept {
-      header.clear();
       std::string line;
       std::size_t method_end;
       if(getline(stream, line) && (method_end = line.find(' ')) != std::string::npos) {
@@ -272,7 +277,6 @@ namespace SimpleWeb {
   public:
     /// Parse status line and header fields
     static bool parse(std::istream &stream, std::string &version, std::string &status_code, CaseInsensitiveMultimap &header) noexcept {
-      header.clear();
       std::string line;
       std::size_t version_end;
       if(getline(stream, line) && (version_end = line.find(' ')) != std::string::npos) {
@@ -281,7 +285,7 @@ namespace SimpleWeb {
         else
           return false;
         if((version_end + 1) < line.size())
-          status_code = line.substr(version_end + 1, line.size() - (version_end + 1) - 1);
+          status_code = line.substr(version_end + 1, line.size() - (version_end + 1) - (line.back() == '\r' ? 1 : 0));
         else
           return false;
 
