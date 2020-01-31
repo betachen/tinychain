@@ -67,8 +67,10 @@ INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/include")
 
 IF(ENABLE_SHARED_LIBS)
   SET(jsoncpp_LIBRARY jsoncpp_shared)
+  SET(tea_LIBRARY tea_shared)
 ELSE()
   SET(jsoncpp_LIBRARY jsoncpp_static)
+  SET(tea_LIBRARY tea_static)
 ENDIF()
 
 IF(WIN32)
