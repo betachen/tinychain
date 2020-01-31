@@ -64,27 +64,23 @@ INCLUDE_DIRECTORIES("${Boost_INCLUDE_DIRS}")
 # ------------------ includes --------------------
 INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/")
 INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/include")
+INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/contrib/sqlite")
 
 IF(ENABLE_SHARED_LIBS)
   SET(jsoncpp_LIBRARY jsoncpp_shared)
   SET(tea_LIBRARY tea_shared)
+  SET(utils_LIBRARY utils_shared)
+  SET(sqlite_LIBRARY sqlite_shared)
 ELSE()
   SET(jsoncpp_LIBRARY jsoncpp_static)
+  SET(sqlite_LIBRARY sqlite_static)
+  SET(utils_LIBRARY utils_static)
   SET(tea_LIBRARY tea_static)
-ENDIF()
-
-IF(WIN32)
-  INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/contrib/sqlite")
-  IF(ENABLE_SHARED_LIBS)
-    SET(sqlite_LIBRARY sqlite_shared)
-  ELSE()
-    SET(sqlite_LIBRARY sqlite_static)
-  ENDIF()
 ENDIF()
 
 ENABLE_TESTING()
 
 ADD_SUBDIRECTORY(contrib)
 ADD_SUBDIRECTORY(src)
-ADD_SUBDIRECTORY(cli-tinychain)
+ADD_SUBDIRECTORY(tinychain-cli)
 

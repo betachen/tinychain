@@ -1,5 +1,7 @@
 FILE(GLOB_RECURSE sqlite_SOURCES "*.c")
-                                                                                
+
+SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-strict-aliasing")
+
 ADD_LIBRARY(sqlite_static STATIC ${sqlite_SOURCES})
 SET_TARGET_PROPERTIES(sqlite_static PROPERTIES OUTPUT_NAME sqlite)
 TARGET_LINK_LIBRARIES(sqlite_static)
