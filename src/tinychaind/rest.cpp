@@ -18,11 +18,6 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
  
-/**
- * Part of:
- * Comments:
- *
-**/
 #include <tinychain/rest/rest.hpp>
 #include <tinychain/utils/Tokeniser.hpp>
 #include <sstream>

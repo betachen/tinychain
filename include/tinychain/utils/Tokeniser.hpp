@@ -18,9 +18,6 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
  
-/*
- * Happy Coding&Trading (0_0).
- */
 #ifndef TOKENISER_HPP
 #define TOKENISER_HPP
 
@@ -71,7 +68,7 @@ class Tokeniser {
   std::string_view::const_iterator i_, j_;
 };
 
-} // swirly
+} // namespace
 
 /** @} */
 

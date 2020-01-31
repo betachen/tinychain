@@ -18,11 +18,6 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
  
-/**
- * Part of:
- * Comments:
- *
-**/
 #include <algorithm>
 #include <tinychain/elements/tinychain.hpp>
 #include <tinychain/organizer/consensus.hpp>

@@ -18,9 +18,6 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
  
-/*
- * Happy Coding&Trading (0_0).
- */
 #pragma once
 
 #include <functional>
