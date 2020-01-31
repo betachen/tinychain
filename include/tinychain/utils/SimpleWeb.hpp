@@ -5,8 +5,8 @@
 
 #include <functional>
 #include <memory>
-#include <tinychain/tinychain.hpp>
-#include <tinychain/lib/threadpool.hpp>
+#include <tinychain/elements/tinychain.hpp>
+#include <tinychain/utils/threadpool.hpp>
 #include <contrib/simpleweb/simpleweb.hpp>
 
 namespace tinychain {

@@ -3,7 +3,7 @@
  * Comments:
  *
 **/
-#include <tinychain/rest.hpp>
+#include <tinychain/rest/rest.hpp>
 #include <sstream>
 
 // defualt

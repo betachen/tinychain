@@ -28,7 +28,7 @@
 #include <mutex>
 #include <boost/date_time.hpp>
 #include <boost/format.hpp>
-#include <tinychain/lib/logging.hpp>
+#include <tinychain/utils/logging.hpp>
 
 namespace tinychain {
 

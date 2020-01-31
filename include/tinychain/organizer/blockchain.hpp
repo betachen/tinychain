@@ -5,9 +5,9 @@
 **/
 #pragma once
 #include <queue>
-#include <tinychain/tinychain.hpp>
-#include <tinychain/database.hpp>
-#include <tinychain/network.hpp>
+#include <tinychain/elements/tinychain.hpp>
+#include <tinychain/database/database.hpp>
+#include <tinychain/network/network.hpp>
 
 namespace tinychain
 {

@@ -4,10 +4,10 @@
  *
 **/
 #include <algorithm>
-#include <tinychain/tinychain.hpp>
-#include <tinychain/consensus.hpp>
-#include <tinychain/blockchain.hpp>
-#include <tinychain/network.hpp>
+#include <tinychain/elements/tinychain.hpp>
+#include <tinychain/organizer/consensus.hpp>
+#include <tinychain/organizer/blockchain.hpp>
+#include <tinychain/network/network.hpp>
 
 namespace tinychain
 {

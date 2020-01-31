@@ -3,9 +3,9 @@
  * Comments:
  *
 **/
-#include <tinychain/tinychain.hpp>
-#include <tinychain/node.hpp>
-#include <tinychain/rest.hpp>
+#include <tinychain/elements/tinychain.hpp>
+#include <tinychain/node/node.hpp>
+#include <tinychain/rest/rest.hpp>
 
 using namespace tinychain;
 

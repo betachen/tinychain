@@ -6,8 +6,8 @@
 #pragma once
 
 #include <contrib/jsoncpp/json/json.h>
-#include <tinychain/lib/logging.hpp>
-#include <tinychain/lib/sha256.hpp>
+#include <tinychain/utils/logging.hpp>
+#include <tinychain/utils/sha256.hpp>
 
 #include <string>
 #include <array>

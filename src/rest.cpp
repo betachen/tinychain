@@ -3,8 +3,8 @@
  * Comments:
  *
 **/
-#include <tinychain/rest.hpp>
-#include <tinychain/lib/Tokeniser.hpp>
+#include <tinychain/rest/rest.hpp>
+#include <tinychain/utils/Tokeniser.hpp>
 #include <sstream>
 
 using namespace std;

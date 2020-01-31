@@ -3,8 +3,8 @@
  * Comments:
  *
 **/
-#include <tinychain/tinychain.hpp>
-#include <tinychain/node.hpp>
+#include <tinychain/elements/tinychain.hpp>
+#include <tinychain/node/node.hpp>
 
 namespace tinychain
 {

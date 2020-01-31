@@ -1,6 +1,6 @@
 
 #include <contrib/jsoncpp/json/json.h>
-#include <tinychain/lib/SimpleWeb.hpp>
+#include <tinychain/utils/SimpleWeb.hpp>
 
 using namespace tinychain;
 using namespace std;
